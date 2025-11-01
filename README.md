@@ -82,8 +82,9 @@ http://127.0.0.1:5000/
 ---
 
 ## 🎥 Demo Video
+Click to watch the demo:  
 👉 
-
+https://github.com/muneebaifrah/kisan_sathi/blob/main/Kisan_sathi(Demo).mp4
 ---
 
 ## 🎯 Future Enhancements
