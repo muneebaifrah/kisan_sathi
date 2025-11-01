@@ -27,7 +27,7 @@ The project aims to empower farmers with accessible technology for better crop p
 | **Backend** | Python (Flask) |
 | **Templates** | Jinja2 (Flask templating) |
 | **APIs Used** | Weather API, News API *(if used)* |
-| **Hosting** | *(Add later if deployed)* |
+| **Hosting** | *Vercel* |
 
 ---
 
@@ -69,7 +69,7 @@ cd kisan_sathi
 pip install flask
 ```
 
-*(Add other requirements if used)*
+
 
 ### ✅ 3. Run the Application
 ```bash
@@ -110,7 +110,7 @@ B.Tech CSE | AI & ML Enthusiast | Social Impact Tech Projects
 
 📧 Email: **muneebaifrah08@gmail.com**  
 🔗 GitHub: **https://github.com/muneebaifrah**  
-🌐 LinkedIn: *(Add link when ready)*
+🌐 LinkedIn: **https://www.linkedin.com/in/muneebaifrah**
 
 ---
 
