@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farming Tools - Kisan Sathi</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f8f5;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: white;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.08);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid #e8f5e8;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #e8f5e8, #f5f8f5);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #666;
+            text-decoration: none;
+            gap: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #f5f8f5;
+            color: #2e7d32;
+        }
+
+        .nav-item.active {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border-left-color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            width: 24px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 25px 40px;
+            border-bottom: 1px solid #e8f5e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .greeting h2 {
+            color: #2e7d32;
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+
+        .greeting p {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #e8f5e8;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .notification-btn {
+            background: #f5f8f5;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .notification-btn:hover {
+            background: #e8f5e8;
+        }
+
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Tools Content */
+        .tools-content {
+            padding: 30px 40px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            color: #2e7d32;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .tool-card.profit::before { background: linear-gradient(90deg, #4CAF50, #66BB6A); }
+        .tool-card.fertilizer::before { background: linear-gradient(90deg, #FF9800, #FFB74D); }
+        .tool-card.loan::before { background: linear-gradient(90deg, #2196F3, #64B5F6); }
+        .tool-card.irrigation::before { background: linear-gradient(90deg, #00BCD4, #4DD0E1); }
+        .tool-card.subsidy::before { background: linear-gradient(90deg, #9C27B0, #BA68C8); }
+        .tool-card.insurance::before { background: linear-gradient(90deg, #F44336, #EF5350); }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tool-icon {
+            font-size: 42px;
+        }
+
+        .tool-info h3 {
+            font-size: 20px;
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+
+        .tool-info p {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .tool-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .use-tool-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .use-tool-btn:hover {
+            background: #45a049;
+            transform: scale(1.02);
+        }
+
+        /* Calculator Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: #2e7d32;
+            font-size: 24px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 14px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            background: #45a049;
+        }
+
+        .result-box {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 4px solid #4CAF50;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-box h3 {
+            color: #2e7d32;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #c8e6c9;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 16px;
+            color: #2e7d32;
+        }
+
+        .result-label {
+            color: #666;
+        }
+
+        .result-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Voice Assistant Button */
+        .voice-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.5);
+        }
+
+        .voice-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">🌱</div>
+            <span class="brand">Kisan Sathi</span>
+        </div>
+        <div class="nav-menu">
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                Dashboard
+            </a>
+            <a href="weather.html" class="nav-item">
+                <span class="nav-icon">⛅</span>
+                Weather
+            </a>
+            <a href="crops.html" class="nav-item">
+                <span class="nav-icon">🌾</span>
+                Crops
+            </a>
+            <a href="market-prices.html" class="nav-item">
+                <span class="nav-icon">💰</span>
+                Market Prices
+            </a>
+            <a href="news.html" class="nav-item">
+                <span class="nav-icon">📰</span>
+                News
+            </a>
+            <a href="tools.html" class="nav-item active">
+                <span class="nav-icon">🛠️</span>
+                Farming Tools
+            </a>
+            <a href="settings.html" class="nav-item">
+                <span class="nav-icon">⚙️</span>
+                Settings
+            </a>
+            <a href="profile.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                My Profile
+            </a>
+            <a href="index.html" class="nav-item" style="margin-top: 20px; color: #c62828;">
+                <span class="nav-icon">🚪</span>
+                Logout
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <header class="header">
+            <div class="greeting">
+                <h2 id="userGreeting">Hello, Demo User! 👋</h2>
+                <p>Welcome to Farming Tools</p>
+            </div>
+            <div class="header-right">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>Online</span>
+                </div>
+                <button class="notification-btn">🔔</button>
+                <div class="profile-btn" id="profileInitials">DU</div>
+            </div>
+        </header>
+
+        <div class="tools-content">
+            <h1 class="page-title">🛠️ Farming Tools & Calculators</h1>
+
+            <div class="tools-grid">
+                <!-- Profit Calculator -->
+                <div class="tool-card profit" onclick="openCalculator('profit')">
+                    <div class="tool-header">
+                        <div class="tool-icon">💵</div>
+                        <div class="tool-info">
+                            <h3>Profit Calculator</h3>
+                            <p>Calculate crop profitability</p>
+                        </div>
+                    </div>
+                    <div class="tool-description">
+                        Estimate your farming profit by calculating total costs vs expected revenue from crop yield and market prices.
+                    </div>
+                    <button class="use-tool-btn">Use Calculator</button>
+                </div>
+
+                <!-- Fertilizer Calculator -->
+                <div class="tool-card fertilizer" onclick="openCalculator('fertilizer')">
+                    <div class="tool-header">
+                        <div class="tool-icon">🧪</div>
+                        <div class="tool-info">
+                            <h3>Fertilizer Calculator</h3>
+                            <p>Get fertilizer recommendations</p>
+                        </div>
+                    </div>
+                    <div class="tool-description">
+                        Calculate the right amount of fertilizer needed based on your crop type, soil condition, and land area.
+                    </div>
+                    <button class="use-tool-btn">Use Calculator</button>
+                </div>
+
+                <!-- Loan Calculator -->
+                <div class="tool-card loan" onclick="openCalculator('loan')">
+                    <div class="tool-header">
+                        <div class="tool-icon">🏦</div>
+                        <div class="tool-info">
+                            <h3>Loan Calculator</h3>
+                            <p>Calculate EMI & interest</p>
+                        </div>
+                    </div>
+                    <div class="tool-description">
+                        Plan your agricultural loan by calculating monthly EMI, total interest, and repayment schedule.
+                    </div>
+                    <button class="use-tool-btn">Use Calculator</button>
+                </div>
+
+                <!-- Irrigation Calculator -->
+                <div class="tool-card irrigation" onclick="openCalculator('irrigation')">
+                    <div class="tool-header">
+                        <div class="tool-icon">💧</div>
+                        <div class="tool-info">
+                            <h3>Irrigation Calculator</h3>
+                            <p>Water requirement estimator</p>
+                        </div>
+                    </div>
+                    <div class="tool-description">
+                        Calculate daily water requirements for your crops based on area, crop type, and weather conditions.
+                    </div>
+                    <button class="use-tool-btn">Use Calculator</button>
+                </div>
+
+                <!-- Subsidy Checker -->
+                <div class="tool-card subsidy" onclick="openCalculator('subsidy')">
+                    <div class="tool-header">
+                        <div class="tool-icon">🎁</div>
+                        <div class="tool-info">
+                            <h3>Subsidy Checker</h3>
+                            <p>Check government subsidies</p>
+                        </div>
+                    </div>
+                    <div class="tool-description">
+                        Find out which government subsidies and schemes you're eligible for based on your farming profile.
+                    </div>
+                    <button class="use-tool-btn">Check Eligibility</button>
+                </div>
+
+                <!-- Insurance Calculator -->
+                <div class="tool-card insurance" onclick="openCalculator('insurance')">
+                    <div class="tool-header">
+                        <div class="tool-icon">🛡️</div>
+                        <div class="tool-info">
+                            <h3>Crop Insurance</h3>
+                            <p>Calculate insurance premium</p>
+                        </div>
+                    </div>
+                    <div class="tool-description">
+                        Estimate crop insurance premium and coverage amount to protect your harvest from natural calamities.
+                    </div>
+                    <button class="use-tool-btn">Calculate Premium</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profit Calculator Modal -->
+    <div id="profitModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💵 Profit Calculator</h2>
+                <button class="close-btn" onclick="closeModal('profitModal')">&times;</button>
+            </div>
+            <form id="profitForm" onsubmit="calculateProfit(event)">
+                <div class="form-group">
+                    <label>Crop Type</label>
+                    <select required>
+                        <option value="">Select crop</option>
+                        <option value="rice">Rice</option>
+                        <option value="wheat">Wheat</option>
+                        <option value="cotton">Cotton</option>
+                        <option value="maize">Maize</option>
+                        <option value="sugarcane">Sugarcane</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Land Area (in acres)</label>
+                    <input type="number" id="landArea" step="0.1" required placeholder="Enter land area">
+                </div>
+                <div class="form-group">
+                    <label>Expected Yield (quintals/acre)</label>
+                    <input type="number" id="expectedYield" step="0.1" required placeholder="Enter expected yield">
+                </div>
+                <div class="form-group">
+                    <label>Market Price (₹/quintal)</label>
+                    <input type="number" id="marketPrice" required placeholder="Enter current market price">
+                </div>
+                <div class="form-group">
+                    <label>Total Investment (₹)</label>
+                    <input type="number" id="totalCost" required placeholder="Seeds, fertilizer, labor, etc.">
+                </div>
+                <button type="submit" class="calculate-btn">Calculate Profit</button>
+            </form>
+            <div id="profitResult" class="result-box">
+                <h3>📊 Calculation Results</h3>
+                <div class="result-item">
+                    <span class="result-label">Total Production:</span>
+                    <span class="result-value" id="totalProduction">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Revenue:</span>
+                    <span class="result-value" id="totalRevenue">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Cost:</span>
+                    <span class="result-value" id="displayCost">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Net Profit:</span>
+                    <span class="result-value" id="netProfit">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fertilizer Calculator Modal -->
+    <div id="fertilizerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🧪 Fertilizer Calculator</h2>
+                <button class="close-btn" onclick="closeModal('fertilizerModal')">&times;</button>
+            </div>
+            <form id="fertilizerForm" onsubmit="calculateFertilizer(event)">
+                <div class="form-group">
+                    <label>Crop Type</label>
+                    <select id="fertCrop" required>
+                        <option value="">Select crop</option>
+                        <option value="rice">Rice</option>
+                        <option value="wheat">Wheat</option>
+                        <option value="cotton">Cotton</option>
+                        <option value="maize">Maize</option>
+                        <option value="vegetables">Vegetables</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Land Area (in acres)</label>
+                    <input type="number" id="fertLand" step="0.1" required placeholder="Enter land area">
+                </div>
+                <div class="form-group">
+                    <label>Soil Type</label>
+                    <select required>
+                        <option value="">Select soil type</option>
+                        <option value="clay">Clay</option>
+                        <option value="loamy">Loamy</option>
+                        <option value="sandy">Sandy</option>
+                        <option value="black">Black Soil</option>
+                    </select>
+                </div>
+                <button type="submit" class="calculate-btn">Get Recommendation</button>
+            </form>
+            <div id="fertilizerResult" class="result-box">
+                <h3>🌱 Fertilizer Recommendation</h3>
+                <div class="result-item">
+                    <span class="result-label">Urea (N):</span>
+                    <span class="result-value" id="ureaQty">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">DAP (P):</span>
+                    <span class="result-value" id="dapQty">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Potash (K):</span>
+                    <span class="result-value" id="potashQty">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Estimated Cost:</span>
+                    <span class="result-value" id="fertCost">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loan Calculator Modal -->
+    <div id="loanModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🏦 Loan Calculator</h2>
+                <button class="close-btn" onclick="closeModal('loanModal')">&times;</button>
+            </div>
+            <form id="loanForm" onsubmit="calculateLoan(event)">
+                <div class="form-group">
+                    <label>Loan Amount (₹)</label>
+                    <input type="number" id="loanAmount" required placeholder="Enter loan amount">
+                </div>
+                <div class="form-group">
+                    <label>Interest Rate (% per year)</label>
+                    <input type="number" id="interestRate" step="0.1" required placeholder="e.g., 7.5">
+                </div>
+                <div class="form-group">
+                    <label>Loan Tenure (years)</label>
+                    <input type="number" id="loanTenure" required placeholder="Enter tenure in years">
+                </div>
+                <button type="submit" class="calculate-btn">Calculate EMI</button>
+            </form>
+            <div id="loanResult" class="result-box">
+                <h3>💳 Loan Details</h3>
+                <div class="result-item">
+                    <span class="result-label">Monthly EMI:</span>
+                    <span class="result-value" id="monthlyEMI">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Interest:</span>
+                    <span class="result-value" id="totalInterest">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Payment:</span>
+                    <span class="result-value" id="totalPayment">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Irrigation Calculator Modal -->
+    <div id="irrigationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💧 Irrigation Calculator</h2>
+                <button class="close-btn" onclick="closeModal('irrigationModal')">&times;</button>
+            </div>
+            <form id="irrigationForm" onsubmit="calculateIrrigation(event)">
+                <div class="form-group">
+                    <label>Crop Type</label>
+                    <select id="irrigCrop" required>
+                        <option value="">Select crop</option>
+                        <option value="rice">Rice (High water need)</option>
+                        <option value="wheat">Wheat (Medium water need)</option>
+                        <option value="cotton">Cotton (Medium water need)</option>
+                        <option value="maize">Maize (Medium water need)</option>
+                        <option value="sugarcane">Sugarcane (High water need)</option>
+                        <option value="vegetables">Vegetables (Low-Medium)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Land Area (in acres)</label>
+                    <input type="number" id="irrigLand" step="0.1" required placeholder="Enter land area">
+                </div>
+                <div class="form-group">
+                    <label>Season</label>
+                    <select id="season" required>
+                        <option value="">Select season</option>
+                        <option value="summer">Summer (High evaporation)</option>
+                        <option value="monsoon">Monsoon (Low need)</option>
+                        <option value="winter">Winter (Medium need)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Irrigation Method</label>
+                    <select id="irrigMethod" required>
+                        <option value="">Select method</option>
+                        <option value="drip">Drip Irrigation (90% efficient)</option>
+                        <option value="sprinkler">Sprinkler (75% efficient)</option>
+                        <option value="flood">Flood Irrigation (50% efficient)</option>
+                    </select>
+                </div>
+                <button type="submit" class="calculate-btn">Calculate Water Need</button>
+            </form>
+            <div id="irrigationResult" class="result-box">
+                <h3>💧 Water Requirement</h3>
+                <div class="result-item">
+                    <span class="result-label">Daily Water Need:</span>
+                    <span class="result-value" id="dailyWater">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Weekly Water Need:</span>
+                    <span class="result-value" id="weeklyWater">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Monthly Water Need:</span>
+                    <span class="result-value" id="monthlyWater">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Efficiency Rating:</span>
+                    <span class="result-value" id="efficiency">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subsidy Checker Modal -->
+    <div id="subsidyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎁 Subsidy Checker</h2>
+                <button class="close-btn" onclick="closeModal('subsidyModal')">&times;</button>
+            </div>
+            <form id="subsidyForm" onsubmit="checkSubsidy(event)">
+                <div class="form-group">
+                    <label>Farmer Category</label>
+                    <select id="farmerCategory" required>
+                        <option value="">Select category</option>
+                        <option value="small">Small Farmer (< 2 acres)</option>
+                        <option value="marginal">Marginal Farmer (2-5 acres)</option>
+                        <option value="large">Large Farmer (> 5 acres)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Land Holding (acres)</label>
+                    <input type="number" id="landHolding" step="0.1" required placeholder="Enter land size">
+                </div>
+                <div class="form-group">
+                    <label>State</label>
+                    <select required>
+                        <option value="">Select state</option>
+                        <option value="telangana">Telangana</option>
+                        <option value="ap">Andhra Pradesh</option>
+                        <option value="karnataka">Karnataka</option>
+                        <option value="maharashtra">Maharashtra</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Annual Income (₹)</label>
+                    <input type="number" id="annualIncome" required placeholder="Enter annual income">
+                </div>
+                <button type="submit" class="calculate-btn">Check Eligibility</button>
+            </form>
+            <div id="subsidyResult" class="result-box">
+                <h3>✅ Eligible Schemes</h3>
+                <div id="subsidyList" style="padding: 10px 0;">
+                    <!-- Dynamic content will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insurance Calculator Modal -->
+    <div id="insuranceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🛡️ Crop Insurance Calculator</h2>
+                <button class="close-btn" onclick="closeModal('insuranceModal')">&times;</button>
+            </div>
+            <form id="insuranceForm" onsubmit="calculateInsurance(event)">
+                <div class="form-group">
+                    <label>Crop Type</label>
+                    <select id="insurCrop" required>
+                        <option value="">Select crop</option>
+                        <option value="rice">Rice</option>
+                        <option value="wheat">Wheat</option>
+                        <option value="cotton">Cotton</option>
+                        <option value="maize">Maize</option>
+                        <option value="sugarcane">Sugarcane</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Land Area (in acres)</label>
+                    <input type="number" id="insurLand" step="0.1" required placeholder="Enter land area">
+                </div>
+                <div class="form-group">
+                    <label>Sum Insured per Acre (₹)</label>
+                    <input type="number" id="sumInsured" required placeholder="e.g., 50000">
+                </div>
+                <div class="form-group">
+                    <label>Coverage Type</label>
+                    <select id="coverageType" required>
+                        <option value="">Select coverage</option>
+                        <option value="basic">Basic (Natural calamities only)</option>
+                        <option value="comprehensive">Comprehensive (All risks)</option>
+                    </select>
+                </div>
+                <button type="submit" class="calculate-btn">Calculate Premium</button>
+            </form>
+            <div id="insuranceResult" class="result-box">
+                <h3>📋 Insurance Details</h3>
+                <div class="result-item">
+                    <span class="result-label">Total Coverage:</span>
+                    <span class="result-value" id="totalCoverage">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Premium Rate:</span>
+                    <span class="result-value" id="premiumRate">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Annual Premium:</span>
+                    <span class="result-value" id="annualPremium">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Government Subsidy:</span>
+                    <span class="result-value" id="govtSubsidy">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Your Payment:</span>
+                    <span class="result-value" id="farmerPayment">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="voice-btn" onclick="activateVoice()">🎤</button>
+
+    <script>
+        // User data
+        const userData = window.userData || {
+            userName: "Demo User",
+            userEmail: "demo@kisansathi.com"
+        };
+
+        const userName = userData.userName;
+        const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase();
+
+        document.getElementById('userGreeting').textContent = `Hello, ${userName}! 👋`;
+        document.getElementById('profileInitials').textContent = userInitials;
+
+        // Open Calculator Modal
+        function openCalculator(type) {
+            const modalMap = {
+                'profit': 'profitModal',
+                'fertilizer': 'fertilizerModal',
+                'loan': 'loanModal',
+                'irrigation': 'irrigationModal',
+                'subsidy': 'subsidyModal',
+                'insurance': 'insuranceModal'
+            };
+
+            const modalId = modalMap[type];
+            if (modalId) {
+                document.getElementById(modalId).classList.add('active');
+            }
+        }
+
+        // Close Modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Calculate Profit
+        function calculateProfit(event) {
+            event.preventDefault();
+            
+            const landArea = parseFloat(document.getElementById('landArea').value);
+            const expectedYield = parseFloat(document.getElementById('expectedYield').value);
+            const marketPrice = parseFloat(document.getElementById('marketPrice').value);
+            const totalCost = parseFloat(document.getElementById('totalCost').value);
+
+            const totalProduction = landArea * expectedYield;
+            const totalRevenue = totalProduction * marketPrice;
+            const netProfit = totalRevenue - totalCost;
+
+            document.getElementById('totalProduction').textContent = `${totalProduction.toFixed(2)} quintals`;
+            document.getElementById('totalRevenue').textContent = `₹${totalRevenue.toLocaleString('en-IN')}`;
+            document.getElementById('displayCost').textContent = `₹${totalCost.toLocaleString('en-IN')}`;
+            document.getElementById('netProfit').textContent = `₹${netProfit.toLocaleString('en-IN')}`;
+            document.getElementById('netProfit').style.color = netProfit >= 0 ? '#2e7d32' : '#c62828';
+
+            document.getElementById('profitResult').style.display = 'block';
+        }
+
+        // Calculate Fertilizer
+        function calculateFertilizer(event) {
+            event.preventDefault();
+            
+            const landArea = parseFloat(document.getElementById('fertLand').value);
+            
+            // Standard fertilizer requirements per acre
+            const urea = (landArea * 50).toFixed(1); // kg
+            const dap = (landArea * 40).toFixed(1); // kg
+            const potash = (landArea * 30).toFixed(1); // kg
+            
+            const ureaCost = parseFloat(urea) * 6; // ₹6 per kg
+            const dapCost = parseFloat(dap) * 25; // ₹25 per kg
+            const potashCost = parseFloat(potash) * 18; // ₹18 per kg
+            const totalCost = ureaCost + dapCost + potashCost;
+
+            document.getElementById('ureaQty').textContent = `${urea} kg`;
+            document.getElementById('dapQty').textContent = `${dap} kg`;
+            document.getElementById('potashQty').textContent = `${potash} kg`;
+            document.getElementById('fertCost').textContent = `₹${totalCost.toLocaleString('en-IN')}`;
+
+            document.getElementById('fertilizerResult').style.display = 'block';
+        }
+
+        // Calculate Loan EMI
+        function calculateLoan(event) {
+            event.preventDefault();
+            
+            const principal = parseFloat(document.getElementById('loanAmount').value);
+            const annualRate = parseFloat(document.getElementById('interestRate').value);
+            const years = parseFloat(document.getElementById('loanTenure').value);
+
+            const monthlyRate = annualRate / 12 / 100;
+            const months = years * 12;
+
+            // EMI Formula: P × r × (1 + r)^n / ((1 + r)^n - 1)
+            const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / 
+                        (Math.pow(1 + monthlyRate, months) - 1);
+            
+            const totalAmount = emi * months;
+            const totalInterest = totalAmount - principal;
+
+            document.getElementById('monthlyEMI').textContent = `₹${emi.toFixed(0).toLocaleString('en-IN')}`;
+            document.getElementById('totalInterest').textContent = `₹${totalInterest.toFixed(0).toLocaleString('en-IN')}`;
+            document.getElementById('totalPayment').textContent = `₹${totalAmount.toFixed(0).toLocaleString('en-IN')}`;
+
+            document.getElementById('loanResult').style.display = 'block';
+        }
+
+        // Voice Assistant
+        function activateVoice() {
+            alert('Voice Assistant feature coming soon! 🎤\n\nYou will be able to:\n- Get weather updates\n- Check crop prices\n- Ask farming questions\n\nAll in your local language!');
+        }
+
+        // Calculate Irrigation
+        function calculateIrrigation(event) {
+            event.preventDefault();
+            
+            const crop = document.getElementById('irrigCrop').value;
+            const landArea = parseFloat(document.getElementById('irrigLand').value);
+            const season = document.getElementById('season').value;
+            const method = document.getElementById('irrigMethod').value;
+
+            // Water requirement in liters per acre per day (base values)
+            const cropWaterNeeds = {
+                'rice': 15000,
+                'wheat': 8000,
+                'cotton': 10000,
+                'maize': 9000,
+                'sugarcane': 18000,
+                'vegetables': 7000
+            };
+
+            // Season multipliers
+            const seasonMultiplier = {
+                'summer': 1.5,
+                'monsoon': 0.4,
+                'winter': 0.8
+            };
+
+            // Efficiency factors
+            const efficiency = {
+                'drip': 0.9,
+                'sprinkler': 0.75,
+                'flood': 0.5
+            };
+
+            const baseWater = cropWaterNeeds[crop] || 10000;
+            const seasonFactor = seasonMultiplier[season] || 1;
+            const efficiencyFactor = efficiency[method] || 0.7;
+
+            const dailyWaterPerAcre = baseWater * seasonFactor;
+            const dailyTotal = dailyWaterPerAcre * landArea;
+            const weeklyTotal = dailyTotal * 7;
+            const monthlyTotal = dailyTotal * 30;
+
+            const efficiencyPercent = (efficiencyFactor * 100).toFixed(0);
+
+            document.getElementById('dailyWater').textContent = `${(dailyTotal/1000).toFixed(2)} kiloliters`;
+            document.getElementById('weeklyWater').textContent = `${(weeklyTotal/1000).toFixed(2)} kiloliters`;
+            document.getElementById('monthlyWater').textContent = `${(monthlyTotal/1000).toFixed(2)} kiloliters`;
+            document.getElementById('efficiency').textContent = `${efficiencyPercent}% efficient`;
+
+            document.getElementById('irrigationResult').style.display = 'block';
+        }
+
+        // Check Subsidy
+        function checkSubsidy(event) {
+            event.preventDefault();
+            
+            const category = document.getElementById('farmerCategory').value;
+            const landHolding = parseFloat(document.getElementById('landHolding').value);
+            const income = parseFloat(document.getElementById('annualIncome').value);
+
+            const schemes = [];
+
+            // PM-KISAN
+            if (landHolding <= 5) {
+                schemes.push({
+                    name: 'PM-KISAN',
+                    benefit: '₹6,000 per year',
+                    description: 'Direct income support in 3 installments'
+                });
+            }
+
+            // Crop Insurance (PMFBY)
+            schemes.push({
+                name: 'PMFBY - Crop Insurance',
+                benefit: 'Up to 90% subsidy',
+                description: 'Premium subsidy on crop insurance'
+            });
+
+            // Soil Health Card
+            schemes.push({
+                name: 'Soil Health Card',
+                benefit: 'Free soil testing',
+                description: 'Get your soil analyzed for free'
+            });
+
+            // Small Farmer schemes
+            if (category === 'small' || category === 'marginal') {
+                schemes.push({
+                    name: 'Kisan Credit Card',
+                    benefit: 'Low-interest loans',
+                    description: 'Credit up to ₹3 lakhs at 4% interest'
+                });
+            }
+
+            // Organic Farming
+            if (landHolding >= 2) {
+                schemes.push({
+                    name: 'Organic Farming Scheme',
+                    benefit: '₹20,000-50,000',
+                    description: 'Support for organic farming adoption'
+                });
+            }
+
+            // Drip Irrigation
+            schemes.push({
+                name: 'Micro Irrigation Subsidy',
+                benefit: 'Up to 60% subsidy',
+                description: 'For drip and sprinkler irrigation systems'
+            });
+
+            const subsidyList = document.getElementById('subsidyList');
+            subsidyList.innerHTML = '';
+
+            schemes.forEach(scheme => {
+                const schemeDiv = document.createElement('div');
+                schemeDiv.style.cssText = 'padding: 12px; background: white; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #4CAF50;';
+                schemeDiv.innerHTML = `
+                    <div style="font-weight: 600; color: #2e7d32; margin-bottom: 4px;">${scheme.name}</div>
+                    <div style="color: #FF9800; font-weight: 600; font-size: 14px; margin-bottom: 4px;">${scheme.benefit}</div>
+                    <div style="color: #666; font-size: 13px;">${scheme.description}</div>
+                `;
+                subsidyList.appendChild(schemeDiv);
+            });
+
+            document.getElementById('subsidyResult').style.display = 'block';
+        }
+
+        // Calculate Insurance
+        function calculateInsurance(event) {
+            event.preventDefault();
+            
+            const crop = document.getElementById('insurCrop').value;
+            const landArea = parseFloat(document.getElementById('insurLand').value);
+            const sumInsured = parseFloat(document.getElementById('sumInsured').value);
+            const coverageType = document.getElementById('coverageType').value;
+
+            const totalCoverage = sumInsured * landArea;
+
+            // Premium rates (as percentage of sum insured)
+            const premiumRates = {
+                'basic': 2.0,    // 2% for basic coverage
+                'comprehensive': 5.0  // 5% for comprehensive
+            };
+
+            const ratePercent = premiumRates[coverageType] || 2.0;
+            const grossPremium = (totalCoverage * ratePercent) / 100;
+
+            // Government subsidy (typically 50% for small farmers)
+            const subsidyPercent = landArea <= 5 ? 50 : 30;
+            const govtSubsidy = (grossPremium * subsidyPercent) / 100;
+            const farmerPayment = grossPremium - govtSubsidy;
+
+            document.getElementById('totalCoverage').textContent = `₹${totalCoverage.toLocaleString('en-IN')}`;
+            document.getElementById('premiumRate').textContent = `${ratePercent}% of sum insured`;
+            document.getElementById('annualPremium').textContent = `₹${grossPremium.toFixed(0).toLocaleString('en-IN')}`;
+            document.getElementById('govtSubsidy').textContent = `₹${govtSubsidy.toFixed(0).toLocaleString('en-IN')} (${subsidyPercent}%)`;
+            document.getElementById('farmerPayment').textContent = `₹${farmerPayment.toFixed(0).toLocaleString('en-IN')}`;
+
+            document.getElementById('insuranceResult').style.display = 'block';
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Time-based greeting
+        const hour = new Date().getHours();
+        let greetingText = 'Hello';
+        if (hour < 12) greetingText = 'Good Morning';
+        else if (hour < 17) greetingText = 'Good Afternoon';
+        else greetingText = 'Good Evening';
+
+        document.getElementById('userGreeting').textContent = `${greetingText}, ${userName}! 👋`;
+    </script>
+</body>
+</html>

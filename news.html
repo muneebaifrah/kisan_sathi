@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural News - Kisan Sathi</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f8f5;
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: white;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.08);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid #e8f5e8;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #e8f5e8, #f5f8f5);
+        }
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+        .nav-menu { padding: 20px 0; }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #666;
+            text-decoration: none;
+            gap: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+        }
+        .nav-item:hover {
+            background: #f5f8f5;
+            color: #2e7d32;
+        }
+        .nav-item.active {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border-left-color: #4CAF50;
+            font-weight: 600;
+        }
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            min-height: 100vh;
+        }
+        .header {
+            background: white;
+            padding: 25px 40px;
+            border-bottom: 1px solid #e8f5e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .greeting h2 { color: #2e7d32; font-size: 26px; margin-bottom: 5px; }
+        .greeting p { color: #999; font-size: 14px; }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #e8f5e8;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+        .dashboard-content { padding: 30px 40px; }
+        .page-title {
+            font-size: 28px;
+            color: #2e7d32;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .filter-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+        }
+        .filter-btn {
+            padding: 8px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: #666;
+        }
+        .filter-btn:hover {
+            border-color: #4CAF50;
+            color: #4CAF50;
+        }
+        .filter-btn.active {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .news-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+        .news-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+        }
+        .news-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-breaking { color: #c62828; }
+        .badge-trending { color: #ff6f00; }
+        .badge-update { color: #1976d2; }
+        .news-content {
+            padding: 20px;
+        }
+        .news-category {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #e8f5e8;
+            color: #2e7d32;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .news-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .news-excerpt {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .news-date {
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .news-source {
+            font-size: 12px;
+            color: #4CAF50;
+            font-weight: 600;
+        }
+        .featured-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        .featured-title {
+            font-size: 22px;
+            color: #2e7d32;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .featured-news {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .featured-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+        }
+        .featured-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .featured-content .news-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .featured-content .news-excerpt {
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .read-more-btn {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            align-self: flex-start;
+        }
+        .read-more-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        .voice-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+        .voice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.5);
+        }
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: #4CAF50;
+            font-size: 18px;
+        }
+        /* News Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s;
+            overflow-y: auto;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content {
+            background: white;
+            margin: 50px auto;
+            padding: 0;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.3s;
+        }
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal-header {
+            padding: 30px;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 32px;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+            transition: all 0.3s;
+        }
+        .close-btn:hover {
+            color: #c62828;
+        }
+        .modal-body {
+            padding: 30px;
+        }
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+            margin-bottom: 25px;
+        }
+        .modal-body .news-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        .modal-body .news-meta {
+            margin-bottom: 25px;
+        }
+        .news-full-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+        }
+        .news-full-content p {
+            margin-bottom: 15px;
+        }
+        @media (max-width: 768px) {
+            .featured-news {
+                grid-template-columns: 1fr;
+            }
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">🌱</div>
+            <span class="brand">Kisan Sathi</span>
+        </div>
+        <div class="nav-menu">
+            <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span>Dashboard</a>
+            <a href="weather.html" class="nav-item"><span class="nav-icon">⛅</span>Weather</a>
+            <a href="crops.html" class="nav-item"><span class="nav-icon">🌾</span>Crops</a>
+            <a href="market-prices.html" class="nav-item"><span class="nav-icon">💰</span>Market Prices</a>
+            <a href="news.html" class="nav-item active"><span class="nav-icon">📰</span>News</a>
+            <a href="farming-tools.html" class="nav-item"><span class="nav-icon">🛠️</span>Farming Tools</a>
+            <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span>Settings</a>
+            <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span>My Profile</a>
+            <a href="index.html" class="nav-item" style="margin-top: 20px; color: #c62828;"><span class="nav-icon">🚪</span>Logout</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <header class="header">
+            <div class="greeting">
+                <h2>Agricultural News</h2>
+                <p>Stay updated with latest farming news and updates</p>
+            </div>
+            <div class="header-right">
+                <div class="status-indicator">
+                    <div class="status-dot"></div><span>Online</span>
+                </div>
+                <div class="profile-btn" id="profileInitials">DU</div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <h1 class="page-title">📰 Latest Agricultural News</h1>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <span class="filter-label">Categories:</span>
+                <button class="filter-btn active" onclick="filterNews('all')">All News</button>
+                <button class="filter-btn" onclick="filterNews('policy')">Policy & Schemes</button>
+                <button class="filter-btn" onclick="filterNews('technology')">Technology</button>
+                <button class="filter-btn" onclick="filterNews('market')">Market Updates</button>
+                <button class="filter-btn" onclick="filterNews('weather')">Weather Alerts</button>
+                <button class="filter-btn" onclick="filterNews('tips')">Farming Tips</button>
+            </div>
+
+            <!-- Featured News -->
+            <div class="featured-section">
+                <h2 class="featured-title">🔥 Featured Story</h2>
+                <div class="featured-news">
+                    <div class="featured-image">🚜</div>
+                    <div class="featured-content">
+                        <span class="news-category">Breaking News</span>
+                        <h3 class="news-title">Government Announces New Agricultural Subsidy Scheme for 2025</h3>
+                        <p class="news-excerpt">
+                            The Ministry of Agriculture has launched a comprehensive subsidy program aimed at supporting small and marginal farmers. The scheme includes financial assistance for seeds, fertilizers, and modern farming equipment.
+                        </p>
+                        <button class="read-more-btn" onclick="openNewsDetail('featured')">Read Full Story</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Grid -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div>⏳ Loading latest news...</div>
+            </div>
+
+            <div class="news-grid" id="newsGrid">
+                <!-- News cards will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- News Detail Modal -->
+    <div id="newsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeNewsModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- News detail will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Button -->
+    <button class="voice-btn" onclick="activateVoice()">🎤</button>
+
+    <script>
+        // User initials
+        const userData = window.userData || { userName: "Demo User" };
+        document.getElementById('profileInitials').textContent = userData.userName.split(' ').map(n => n[0]).join('').toUpperCase();
+
+        // News data
+        const newsData = [
+            {
+                id: 1,
+                category: 'policy',
+                badge: 'Breaking',
+                icon: '📋',
+                title: 'PM-KISAN Scheme: Direct Benefit Transfer Extended to More Farmers',
+                excerpt: 'Government extends the PM-KISAN direct benefit transfer scheme to include additional 2 million farmers across rural India.',
+                content: 'The Prime Minister Kisan Samman Nidhi (PM-KISAN) scheme has been expanded to benefit more farmers across the country. Under this initiative, eligible farmers will receive ₹6,000 per year in three equal installments directly into their bank accounts. The scheme aims to provide income support to all landholding farmers\' families. Registration is now open through Common Service Centers and the official PM-KISAN portal.',
+                date: '2 hours ago',
+                source: 'Ministry of Agriculture',
+                fullDate: 'November 1, 2025'
+            },
+            {
+                id: 2,
+                category: 'technology',
+                badge: 'Trending',
+                icon: '🤖',
+                title: 'AI-Powered Drones for Precision Agriculture Gaining Popularity',
+                excerpt: 'Farmers in Punjab and Haryana adopt AI-enabled drones for crop monitoring and pesticide spraying.',
+                content: 'Agricultural technology is witnessing a revolution with AI-powered drones becoming increasingly popular among Indian farmers. These drones are equipped with advanced sensors and cameras that can monitor crop health, detect diseases early, and apply pesticides precisely. Farmers report up to 30% reduction in pesticide costs and improved crop yields. Several state governments are offering subsidies to encourage adoption of this technology.',
+                date: '5 hours ago',
+                source: 'AgriTech India',
+                fullDate: 'November 1, 2025'
+            },
+            {
+                id: 3,
+                category: 'market',
+                badge: 'Update',
+                icon: '💰',
+                title: 'Cotton Prices Rise 8% Following Strong Export Demand',
+                excerpt: 'Cotton market sees significant price increase due to international demand and reduced supply.',
+                content: 'Cotton prices in major mandis across India have increased by 8% over the past week. The surge is attributed to strong export demand from countries like Bangladesh and Vietnam, coupled with lower domestic production this season. Experts suggest farmers holding good quality cotton stock may benefit from current market conditions. The Cotton Corporation of India has assured adequate MSP support to protect farmers\' interests.',
+                date: '1 day ago',
+                source: 'Agmarknet',
+                fullDate: 'October 31, 2025'
+            },
+            {
+                id: 4,
+                category: 'weather',
+                badge: 'Alert',
+                icon: '⛈️',
+                title: 'IMD Issues Heavy Rainfall Warning for Telangana and AP',
+                excerpt: 'Farmers advised to take precautionary measures as heavy rainfall expected in the next 48 hours.',
+                content: 'The India Meteorological Department (IMD) has issued a heavy rainfall alert for Telangana and Andhra Pradesh for the next 48 hours. Farmers are advised to secure harvested crops, ensure proper drainage in fields, and avoid pesticide application during this period. Agricultural extension officers have been deployed to assist farmers with emergency preparations. The government has set up helpline numbers for immediate support.',
+                date: '3 hours ago',
+                source: 'IMD',
+                fullDate: 'November 1, 2025'
+            },
+            {
+                id: 5,
+                category: 'tips',
+                badge: 'Advisory',
+                icon: '🌱',
+                title: 'Organic Farming Methods Show 40% Increase in Soil Health',
+                excerpt: 'Recent study reveals significant benefits of organic farming practices on long-term soil fertility.',
+                content: 'A comprehensive study conducted by ICAR has shown that organic farming methods lead to a 40% improvement in soil health over traditional methods. The research highlighted benefits such as increased microbial activity, better water retention, and reduced dependency on chemical fertilizers. Farmers transitioning to organic methods are eligible for government certification and premium prices in the market. Training programs are being organized across districts.',
+                date: '2 days ago',
+                source: 'ICAR Research',
+                fullDate: 'October 30, 2025'
+            },
+            {
+                id: 6,
+                category: 'policy',
+                badge: 'New',
+                icon: '🏛️',
+                title: 'Crop Insurance Claim Process Simplified with Digital Platform',
+                excerpt: 'PMFBY introduces mobile app for easy crop insurance claim submission and tracking.',
+                content: 'The Pradhan Mantri Fasal Bima Yojana (PMFBY) has launched a new mobile application to simplify crop insurance claims. Farmers can now report crop damage, upload photos, and track claim status directly from their smartphones. The digital platform has reduced claim processing time from 60 days to just 15 days. Over 3 million farmers have already registered on the new platform.',
+                date: '1 day ago',
+                source: 'PMFBY',
+                fullDate: 'October 31, 2025'
+            },
+            {
+                id: 7,
+                category: 'market',
+                badge: 'Trending',
+                icon: '🌾',
+                title: 'Record Wheat Procurement Expected This Season',
+                excerpt: 'Government agencies prepare for bumper wheat harvest with increased storage capacity.',
+                content: 'The Food Corporation of India (FCI) is preparing for record wheat procurement this rabi season, expecting over 45 million tonnes. The government has increased Minimum Support Price (MSP) by ₹150 per quintal to encourage farmers. Additional storage facilities have been set up across major wheat-producing states including Punjab, Haryana, Uttar Pradesh, and Madhya Pradesh.',
+                date: '6 hours ago',
+                source: 'FCI News',
+                fullDate: 'November 1, 2025'
+            },
+            {
+                id: 8,
+                category: 'technology',
+                badge: 'Innovation',
+                icon: '💧',
+                title: 'Smart Irrigation Systems Save 50% Water in Maharashtra Farms',
+                excerpt: 'Drip irrigation technology combined with IoT sensors showing remarkable water conservation results.',
+                content: 'Farmers in Maharashtra are experiencing significant water savings using smart irrigation systems. The technology combines drip irrigation with IoT-based soil moisture sensors that automatically control water flow based on crop needs. Farmers report 50% reduction in water usage while maintaining or improving crop yields. The state government offers 80% subsidy on installation costs for small farmers.',
+                date: '12 hours ago',
+                source: 'Maharashtra Agri Dept',
+                fullDate: 'November 1, 2025'
+            },
+            {
+                id: 9,
+                category: 'tips',
+                badge: 'Advisory',
+                icon: '🐛',
+                title: 'Integrated Pest Management: Reduce Pesticide Costs by 60%',
+                excerpt: 'Agricultural experts recommend IPM techniques for sustainable and cost-effective pest control.',
+                content: 'Agricultural universities are promoting Integrated Pest Management (IPM) as an effective alternative to chemical pesticides. IPM combines biological control, crop rotation, and targeted pesticide use only when necessary. Farmers practicing IPM report 60% reduction in pesticide expenses and healthier crops. Free training workshops are being conducted by Krishi Vigyan Kendras across all districts.',
+                date: '1 day ago',
+                source: 'Agriculture University',
+                fullDate: 'October 31, 2025'
+            },
+            {
+                id: 10,
+                category: 'weather',
+                badge: 'Update',
+                icon: '🌡️',
+                title: 'Temperature Drop Expected: Protect Standing Crops from Cold',
+                excerpt: 'Weather department forecasts temperature drop of 5-7°C in northern regions.',
+                content: 'The India Meteorological Department predicts a significant temperature drop in northern states over the next week. Farmers are advised to protect standing vegetable crops and newly planted wheat from cold stress. Recommended measures include light irrigation before cold nights, smoke generation in orchards, and covering sensitive crops with plastic sheets. Agricultural helplines are active 24/7 for guidance.',
+                date: '8 hours ago',
+                source: 'Weather Advisory',
+                fullDate: 'November 1, 2025'
+            },
+            {
+                id: 11,
+                category: 'policy',
+                badge: 'New',
+                icon: '🎓',
+                title: 'Free Skill Development Training for 50,000 Young Farmers',
+                excerpt: 'Government launches nationwide program to train youth in modern agricultural practices.',
+                content: 'The Ministry of Skill Development and Agriculture jointly announced a flagship program to train 50,000 young farmers in modern agricultural practices. The free training covers topics like precision farming, agribusiness management, organic certification, and digital marketing for farm produce. Participants will receive certificates recognized by NSDC. Registration is open on the official portal.',
+                date: '2 days ago',
+                source: 'Skill India',
+                fullDate: 'October 30, 2025'
+            },
+            {
+                id: 12,
+                category: 'technology',
+                badge: 'Innovation',
+                icon: '📱',
+                title: 'Mobile App Connects Farmers Directly with Buyers, Eliminates Middlemen',
+                excerpt: 'New agri-tech platform enables farmers to sell produce directly at better prices.',
+                content: 'A new mobile application is revolutionizing agricultural marketing by connecting farmers directly with buyers, retailers, and consumers. The platform eliminates middlemen, ensuring farmers get 20-30% higher prices for their produce. Features include real-time price discovery, quality grading using AI, digital payments, and logistics support. Over 100,000 farmers have already registered on the platform.',
+                date: '4 hours ago',
+                source: 'AgriConnect',
+                fullDate: 'November 1, 2025'
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        // Render news cards
+        function renderNews(filter = 'all') {
+            const newsGrid = document.getElementById('newsGrid');
+            const filteredNews = filter === 'all' ? newsData : newsData.filter(news => news.category === filter);
+
+            newsGrid.innerHTML = filteredNews.map(news => `
+                <div class="news-card" onclick="openNewsDetail(${news.id})">
+                    <div class="news-image">
+                        <span>${news.icon}</span>
+                        <span class="news-badge badge-${news.badge.toLowerCase()}">${news.badge}</span>
+                    </div>
+                    <div class="news-content">
+                        <span class="news-category">${news.category}</span>
+                        <h3 class="news-title">${news.title}</h3>
+                        <p class="news-excerpt">${news.excerpt}</p>
+                        <div class="news-meta">
+                            <span class="news-date">🕒 ${news.date}</span>
+                            <span class="news-source">${news.source}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter news
+        function filterNews(category) {
+            currentFilter = category;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('newsGrid').style.opacity = '0.3';
+
+            // Simulate loading delay
+            setTimeout(() => {
+                renderNews(category);
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('newsGrid').style.opacity = '1';
+            }, 500);
+        }
+
+        // Open news detail modal
+        function openNewsDetail(newsId) {
+            let selectedNews;
+            
+            if (newsId === 'featured') {
+                selectedNews = {
+                    id: 0,
+                    category: 'policy',
+                    icon: '🚜',
+                    title: 'Government Announces New Agricultural Subsidy Scheme for 2025',
+                    content: `The Ministry of Agriculture and Farmers Welfare has announced a comprehensive new subsidy scheme for 2025, aimed at providing substantial support to small and marginal farmers across India. This landmark initiative represents one of the most significant agricultural policy reforms in recent years.
+
+Key Features of the Scheme:
+
+1. Financial Assistance: Eligible farmers will receive direct financial support for purchasing quality seeds, fertilizers, and modern farming equipment. The subsidy covers up to 75% of the cost for small farmers and 60% for marginal farmers.
+
+2. Equipment Modernization: The scheme includes special provisions for mechanization, offering subsidies on tractors, harvesters, and irrigation equipment. Farmers can avail loans at reduced interest rates of 4% per annum.
+
+3. Organic Farming Support: Additional incentives are provided for farmers transitioning to organic farming methods, including certification support and premium pricing arrangements.
+
+4. Technology Integration: Free access to agricultural mobile apps, weather forecasting tools, and soil health monitoring services will be provided to all registered farmers.
+
+5. Insurance Coverage: Enhanced crop insurance with 90% premium subsidy to protect farmers against natural calamities and crop failures.
+
+Registration Process: Farmers can register through their nearest Common Service Centers, agricultural offices, or online through the official portal. Documents required include land records, Aadhaar card, and bank account details.
+
+The scheme is expected to benefit over 10 million farmers in its first year of implementation. State governments have been directed to set up dedicated help desks in every district to assist farmers with registration and queries.`,
+                    date: 'Today',
+                    source: 'Ministry of Agriculture',
+                    fullDate: 'November 1, 2025'
+                };
+            } else {
+                selectedNews = newsData.find(news => news.id === newsId);
+            }
+
+            if (!selectedNews) return;
+
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div class="modal-image">${selectedNews.icon}</div>
+                <span class="news-category">${selectedNews.category}</span>
+                <h2 class="news-title">${selectedNews.title}</h2>
+                <div class="news-meta">
+                    <span class="news-date">📅 ${selectedNews.fullDate}</span>
+                    <span class="news-source">${selectedNews.source}</span>
+                </div>
+                <div class="news-full-content">
+                    ${selectedNews.content.split('\n\n').map(para => `<p>${para}</p>`).join('')}
+                </div>
+            `;
+
+            document.getElementById('newsModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close news modal
+        function closeNewsModal() {
+            document.getElementById('newsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('newsModal');
+            if (event.target === modal) {
+                closeNewsModal();
+            }
+        }
+
+        // Voice assistant
+        function activateVoice() {
+            alert('Voice Assistant feature coming soon! 🎤\n\nYou will be able to:\n- Get weather updates\n- Check crop prices\n- Ask farming questions\n\nAll in your local language!');
+        }
+
+        // Initial render
+        renderNews();
+
+        // Auto-refresh news (simulate real-time updates)
+        setInterval(() => {
+            if (currentFilter === 'all') {
+                // Update time stamps
+                const timeElements = document.querySelectorAll('.news-date');
+                // This simulates news aging - in production, fetch from API
+            }
+        }, 60000); // Every minute
+    </script>
+</body>
+</html>

@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Kisan Sathi</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #f5f8f5;
+            --bg-secondary: white;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-tertiary: #999;
+            --accent-primary: #4CAF50;
+            --accent-secondary: #66BB6A;
+            --border-color: #e0e0e0;
+            --hover-bg: #f5f8f5;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark-mode {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --text-tertiary: #808080;
+            --border-color: #404040;
+            --hover-bg: #3a3a3a;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            display: flex;
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.08);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: background 0.3s;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #e8f5e8, #f5f8f5);
+        }
+
+        body.dark-mode .sidebar-header {
+            background: linear-gradient(135deg, #2d4a2d, #1a1a1a);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        body.dark-mode .brand {
+            color: #66BB6A;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            gap: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--hover-bg);
+            color: #2e7d32;
+        }
+
+        .nav-item.active {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border-left-color: #4CAF50;
+            font-weight: 600;
+        }
+
+        body.dark-mode .nav-item.active {
+            background: #2d4a2d;
+            color: #66BB6A;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            width: 24px;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--bg-secondary);
+            padding: 25px 40px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .greeting h2 {
+            color: var(--accent-primary);
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+
+        .greeting p {
+            color: var(--text-tertiary);
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #e8f5e8;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        body.dark-mode .status-indicator {
+            background: #2d4a2d;
+            color: #66BB6A;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .notification-btn {
+            background: var(--hover-bg);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .notification-btn:hover {
+            background: #e8f5e8;
+        }
+
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .settings-content {
+            padding: 30px 40px;
+            max-width: 1200px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            color: var(--accent-primary);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .settings-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .setting-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s;
+        }
+
+        .setting-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+        }
+
+        .setting-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .setting-icon {
+            font-size: 32px;
+            width: 50px;
+            height: 50px;
+            background: #e8f5e8;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark-mode .setting-icon {
+            background: #2d4a2d;
+        }
+
+        .setting-info h3 {
+            font-size: 20px;
+            color: var(--accent-primary);
+            margin-bottom: 5px;
+        }
+
+        .setting-info p {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .toggle-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .toggle-group:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-label {
+            flex: 1;
+        }
+
+        .toggle-label h4 {
+            color: var(--text-primary);
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .toggle-label p {
+            color: var(--text-tertiary);
+            font-size: 13px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: #ccc;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #4CAF50;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+            transform: scale(1.02);
+        }
+
+        .btn-secondary {
+            background: var(--hover-bg);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        body.dark-mode .btn-secondary:hover {
+            background: #404040;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .language-option {
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--bg-secondary);
+        }
+
+        .language-option:hover {
+            border-color: #4CAF50;
+            background: var(--hover-bg);
+        }
+
+        .language-option.selected {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+        }
+
+        body.dark-mode .language-option.selected {
+            background: #2d4a2d;
+        }
+
+        .language-option .flag {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .language-option .name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .voice-language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .voice-lang-option {
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .voice-lang-option:hover {
+            border-color: #4CAF50;
+            background: var(--hover-bg);
+        }
+
+        .voice-lang-option.selected {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+        }
+
+        body.dark-mode .voice-lang-option.selected {
+            background: #2d4a2d;
+        }
+
+        .voice-lang-option .icon {
+            font-size: 24px;
+        }
+
+        .voice-lang-option .info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .voice-lang-option .info .name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .voice-lang-option .info .native {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .success-message {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .voice-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.5);
+        }
+
+        .voice-btn:active {
+            transform: scale(0.95);
+        }
+
+        .storage-info {
+            background: var(--hover-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .storage-bar {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .storage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            width: 35%;
+            transition: width 0.3s;
+        }
+
+        .storage-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .location-status {
+            background: #e3f2fd;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #1976d2;
+            display: none;
+        }
+
+        .location-status.show {
+            display: block;
+        }
+
+        body.dark-mode .location-status {
+            background: #1a237e;
+            color: #64b5f6;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">🌱</div>
+            <span class="brand" data-translate="app_name">Kisan Sathi</span>
+        </div>
+        <div class="nav-menu">
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span data-translate="nav_dashboard">Dashboard</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⛅</span>
+                <span data-translate="nav_weather">Weather</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🌾</span>
+                <span data-translate="nav_crops">Crops</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">💰</span>
+                <span data-translate="nav_market">Market Prices</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📰</span>
+                <span data-translate="nav_news">News</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🛠️</span>
+                <span data-translate="nav_tools">Farming Tools</span>
+            </a>
+            <a href="#" class="nav-item active">
+                <span class="nav-icon">⚙️</span>
+                <span data-translate="nav_settings">Settings</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span data-translate="nav_profile">My Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <header class="header">
+            <div class="greeting">
+                <h2 id="userGreeting">Hello, Muneeba Ifrah! 👋</h2>
+                <p data-translate="header_subtitle">Manage your preferences</p>
+            </div>
+            <div class="header-right">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span data-translate="status_online">Online</span>
+                </div>
+                <button class="notification-btn">🔔</button>
+                <div class="profile-btn" id="profileInitials">MI</div>
+            </div>
+        </header>
+
+        <div class="settings-content">
+            <h1 class="page-title">⚙️ <span data-translate="page_title">Settings</span></h1>
+
+            <div id="successMessage" class="success-message">
+                <span id="successText" data-translate="success_message">✅ Settings saved successfully!</span>
+            </div>
+
+            <div class="settings-grid">
+                <!-- Language Settings -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-icon">🌐</div>
+                        <div class="setting-info">
+                            <h3 data-translate="lang_title">Language Preferences</h3>
+                            <p data-translate="lang_subtitle">Choose your preferred language for the entire app</p>
+                        </div>
+                    </div>
+                    <div class="language-grid">
+                        <div class="language-option" data-lang="en" onclick="selectLanguage('en')">
+                            <div class="flag">🇬🇧</div>
+                            <div class="name">English</div>
+                        </div>
+                        <div class="language-option" data-lang="hi" onclick="selectLanguage('hi')">
+                            <div class="flag">🇮🇳</div>
+                            <div class="name">हिंदी</div>
+                        </div>
+                        <div class="language-option" data-lang="te" onclick="selectLanguage('te')">
+                            <div class="flag">🇮🇳</div>
+                            <div class="name">తెలుగు</div>
+                        </div>
+                        <div class="language-option" data-lang="ur" onclick="selectLanguage('ur')">
+                            <div class="flag">🇮🇳</div>
+                            <div class="name">اردو</div>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="saveLanguage()">
+                            <span data-translate="btn_save_lang">💾 Save Language & Apply</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dark Mode -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-icon">🌙</div>
+                        <div class="setting-info">
+                            <h3 data-translate="theme_title">Theme Settings</h3>
+                            <p data-translate="theme_subtitle">Choose your preferred theme</p>
+                        </div>
+                    </div>
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="dark_mode">Dark Mode</h4>
+                            <p data-translate="dark_mode_desc">Enable dark theme for better viewing at night</p>
+                        </div>
+                        <div class="toggle-switch" id="darkModeToggle" onclick="toggleDarkMode()"></div>
+                    </div>
+                </div>
+
+                <!-- Location Settings -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-icon">📍</div>
+                        <div class="setting-info">
+                            <h3 data-translate="loc_title">Location Settings</h3>
+                            <p data-translate="loc_subtitle">Set your farm location for accurate weather and market data</p>
+                        </div>
+                    </div>
+                    <div id="locationStatus" class="location-status">
+                        📍 <span id="locationText">Location not set</span>
+                    </div>
+                    <form id="locationForm">
+                        <div class="form-group">
+                            <label data-translate="loc_state">State</label>
+                            <select id="state">
+                                <option value="" data-translate="select_state">Select State</option>
+                                <option value="telangana">Telangana</option>
+                                <option value="ap">Andhra Pradesh</option>
+                                <option value="karnataka">Karnataka</option>
+                                <option value="maharashtra">Maharashtra</option>
+                                <option value="punjab">Punjab</option>
+                                <option value="haryana">Haryana</option>
+                                <option value="up">Uttar Pradesh</option>
+                                <option value="mp">Madhya Pradesh</option>
+                                <option value="rajasthan">Rajasthan</option>
+                                <option value="gujarat">Gujarat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label data-translate="loc_district">District</label>
+                            <input type="text" id="district" data-translate-placeholder="enter_district" placeholder="Enter district">
+                        </div>
+                        <div class="form-group">
+                            <label data-translate="loc_village">Village/Town</label>
+                            <input type="text" id="village" data-translate-placeholder="enter_village" placeholder="Enter village or town">
+                        </div>
+                        <div class="button-group">
+                            <button type="button" class="btn btn-primary" onclick="saveLocation()">
+                                <span data-translate="btn_save_loc">💾 Save Location</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="detectLocation()">
+                                <span data-translate="btn_detect_loc">📍 Detect My Location</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-icon">🔔</div>
+                        <div class="setting-info">
+                            <h3 data-translate="notif_title">Notification Preferences</h3>
+                            <p data-translate="notif_subtitle">Manage what notifications you receive</p>
+                        </div>
+                    </div>
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="notif_weather">Weather Alerts</h4>
+                            <p data-translate="notif_weather_desc">Get notified about severe weather conditions</p>
+                        </div>
+                        <div class="toggle-switch active" id="weatherToggle" onclick="toggleSetting('weatherToggle')"></div>
+                    </div>
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="notif_price">Price Alerts</h4>
+                            <p data-translate="notif_price_desc">Notify when crop prices change significantly</p>
+                        </div>
+                        <div class="toggle-switch active" id="priceToggle" onclick="toggleSetting('priceToggle')"></div>
+                    </div>
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="notif_tips">Farming Tips</h4>
+                            <p data-translate="notif_tips_desc">Receive daily farming tips and advice</p>
+                        </div>
+                        <div class="toggle-switch" id="tipsToggle" onclick="toggleSetting('tipsToggle')"></div>
+                    </div>
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="notif_schemes">Government Schemes</h4>
+                            <p data-translate="notif_schemes_desc">Updates on new subsidies and schemes</p>
+                        </div>
+                        <div class="toggle-switch active" id="schemesToggle" onclick="toggleSetting('schemesToggle')"></div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="saveNotifications()">
+                            <span data-translate="btn_save_notif">💾 Save Preferences</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Voice Settings -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-icon">🎤</div>
+                        <div class="setting-info">
+                            <h3 data-translate="voice_title">Voice Assistant Settings</h3>
+                            <p data-translate="voice_subtitle">Configure voice interaction preferences</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label data-translate="voice_lang_label">Voice Language</label>
+                        <div class="voice-language-grid">
+                            <div class="voice-lang-option" data-voice-lang="en-IN" onclick="selectVoiceLanguage('en-IN')">
+                                <span class="icon">🇬🇧</span>
+                                <div class="info">
+                                    <div class="name">English</div>
+                                    <div class="native">India</div>
+                                </div>
+                            </div>
+                            <div class="voice-lang-option" data-voice-lang="hi-IN" onclick="selectVoiceLanguage('hi-IN')">
+                                <span class="icon">🇮🇳</span>
+                                <div class="info">
+                                    <div class="name">Hindi</div>
+                                    <div class="native">हिंदी</div>
+                                </div>
+                            </div>
+                            <div class="voice-lang-option" data-voice-lang="te-IN" onclick="selectVoiceLanguage('te-IN')">
+                                <span class="icon">🇮🇳</span>
+                                <div class="info">
+                                    <div class="name">Telugu</div>
+                                    <div class="native">తెలుగు</div>
+                                </div>
+                            </div>
+                            <div class="voice-lang-option" data-voice-lang="ur-IN" onclick="selectVoiceLanguage('ur-IN')">
+                                <span class="icon">🇮🇳</span>
+                                <div class="info">
+                                    <div class="name">Urdu</div>
+                                    <div class="native">اردو</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="voice_input">Voice Input</h4>
+                            <p data-translate="voice_input_desc">Allow voice commands</p>
+                        </div>
+                        <div class="toggle-switch active" id="voiceInputToggle" onclick="toggleSetting('voiceInputToggle')"></div>
+                    </div>
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="voice_output">Voice Output</h4>
+                            <p data-translate="voice_output_desc">Enable spoken responses</p>
+                        </div>
+                        <div class="toggle-switch active" id="voiceOutputToggle" onclick="toggleSetting('voiceOutputToggle')"></div>
+                    </div>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label data-translate="voice_speed">Voice Speed</label>
+                        <select id="voiceSpeed">
+                            <option value="0.75" data-translate="voice_speed_slow">Slow</option>
+                            <option value="1" selected data-translate="voice_speed_normal">Normal</option>
+                            <option value="1.25" data-translate="voice_speed_fast">Fast</option>
+                        </select>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="saveVoiceSettings()">
+                            <span data-translate="btn_save_voice">💾 Save Settings</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="testVoice()">
+                            <span data-translate="btn_test_voice">🎤 Test Voice</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Data & Storage -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-icon">💾</div>
+                        <div class="setting-info">
+                            <h3 data-translate="storage_title">Data & Storage</h3>
+                            <p data-translate="storage_subtitle">Manage offline data and cache</p>
+                        </div>
+                    </div>
+                    <div class="storage-info">
+                        <div class="storage-text">
+                            <span data-translate="storage_used">Storage Used</span>
+                            <span id="storageUsed">3.5 MB / 10 MB</span>
+                        </div>
+                        <div class="storage-bar">
+                            <div class="storage-fill" id="storageFill"></div>
+                        </div>
+                    </div>
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="storage_offline">Offline Mode</h4>
+                            <p data-translate="storage_offline_desc">Download data for offline access</p>
+                        </div>
+                        <div class="toggle-switch active" id="offlineToggle" onclick="toggleSetting('offlineToggle')"></div>
+                    </div>
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="storage_sync">Auto-Sync</h4>
+                            <p data-translate="storage_sync_desc">Automatically sync when online</p>
+                        </div>
+                        <div class="toggle-switch active" id="syncToggle" onclick="toggleSetting('syncToggle')"></div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="clearCache()">
+                            <span data-translate="btn_clear_cache">🗑️ Clear Cache</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadOfflineData()">
+                            <span data-translate="btn_download_data">⬇️ Download Data</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Privacy & Security -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-icon">🔒</div>
+                        <div class="setting-info">
+                            <h3 data-translate="privacy_title">Privacy & Security</h3>
+                            <p data-translate="privacy_subtitle">Manage your privacy settings</p>
+                        </div>
+                    </div>
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="privacy_location">Location Sharing</h4>
+                            <p data-translate="privacy_location_desc">Share location for better recommendations</p>
+                        </div>
+                        <div class="toggle-switch active" id="locationToggle" onclick="toggleSetting('locationToggle')"></div>
+                    </div>
+                    <div class="toggle-group">
+                        <div class="toggle-label">
+                            <h4 data-translate="privacy_analytics">Usage Analytics</h4>
+                            <p data-translate="privacy_analytics_desc">Help improve the app by sharing usage data</p>
+                        </div>
+                        <div class="toggle-switch" id="analyticsToggle" onclick="toggleSetting('analyticsToggle')"></div>
+                    </div>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label data-translate="privacy_password">Change Password</label>
+                        <input type="password" id="newPassword" data-translate-placeholder="enter_new_password" placeholder="Enter new password">
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="changePassword()">
+                            <span data-translate="btn_update_password">🔐 Update Password</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- About & Support -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-icon">ℹ️</div>
+                        <div class="setting-info">
+                            <h3 data-translate="about_title">About & Support</h3>
+                            <p data-translate="about_subtitle">App information and help</p>
+                        </div>
+                    </div>
+                    <div style="padding: 10px 0;">
+                        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.8;">
+                            <strong style="color: #2e7d32;">Kisan Sathi</strong> - <span data-translate="about_tagline">AI-Driven Agriculture Insights Platform</span><br>
+                            <span data-translate="about_version">Version</span>: 1.0.0<br>
+                            <span data-translate="about_developer">Developed by</span>: <strong style="color: #4CAF50;">Muneeba Ifrah</strong><br><br>
+                            <span data-translate="about_description">A voice-interactive PWA designed to empower Indian farmers with real-time agricultural insights, weather forecasts, market prices, and AI-based crop recommendations.</span>
+                        </p>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="showHelp()">
+                            <span data-translate="btn_help">📖 Help Center</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="showTerms()">
+                            <span data-translate="btn_terms">📄 Terms & Privacy</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="contactSupport()">
+                            <span data-translate="btn_support">📧 Contact Support</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Critical Actions -->
+                <div class="setting-card" style="border-left: 4px solid #f44336;">
+                    <div class="setting-header">
+                        <div class="setting-icon" style="background: #ffebee;">⚠️</div>
+                        <div class="setting-info">
+                            <h3 style="color: #c62828;" data-translate="critical_title">Critical Actions</h3>
+                            <p data-translate="critical_subtitle">Proceed with caution - these actions are permanent</p>
+                        </div>
+                    </div>
+                    <div style="padding: 15px; background: #fff3e0; border-radius: 8px; margin-bottom: 15px;">
+                        <p style="color: #e65100; font-size: 13px;" data-translate="critical_warning">
+                            ⚠️ These actions cannot be undone. Please be certain before proceeding.
+                        </p>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-danger" onclick="resetSettings()">
+                            <span data-translate="btn_reset">🔄 Reset All Settings</span>
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteAccount()">
+                            <span data-translate="btn_delete">🗑️ Delete Account</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="voice-btn" onclick="activateVoice()">🎤</button>
+
+    <script>
+        // Comprehensive translation dictionary
+        const translations = {
+            en: {
+                app_name: "Kisan Sathi",
+                nav_dashboard: "Dashboard",
+                nav_weather: "Weather",
+                nav_crops: "Crops",
+                nav_market: "Market Prices",
+                nav_news: "News",
+                nav_tools: "Farming Tools",
+                nav_settings: "Settings",
+                nav_profile: "My Profile",
+                header_subtitle: "Manage your preferences",
+                status_online: "Online",
+                page_title: "Settings",
+                success_message: "✅ Settings saved successfully!",
+                lang_title: "Language Preferences",
+                lang_subtitle: "Choose your preferred language for the entire app",
+                btn_save_lang: "💾 Save Language & Apply",
+                theme_title: "Theme Settings",
+                theme_subtitle: "Choose your preferred theme",
+                dark_mode: "Dark Mode",
+                dark_mode_desc: "Enable dark theme for better viewing at night",
+                loc_title: "Location Settings",
+                loc_subtitle: "Set your farm location for accurate weather and market data",
+                loc_state: "State",
+                loc_district: "District",
+                loc_village: "Village/Town",
+                select_state: "Select State",
+                enter_district: "Enter district",
+                enter_village: "Enter village or town",
+                btn_save_loc: "💾 Save Location",
+                btn_detect_loc: "📍 Detect My Location",
+                notif_title: "Notification Preferences",
+                notif_subtitle: "Manage what notifications you receive",
+                notif_weather: "Weather Alerts",
+                notif_weather_desc: "Get notified about severe weather conditions",
+                notif_price: "Price Alerts",
+                notif_price_desc: "Notify when crop prices change significantly",
+                notif_tips: "Farming Tips",
+                notif_tips_desc: "Receive daily farming tips and advice",
+                notif_schemes: "Government Schemes",
+                notif_schemes_desc: "Updates on new subsidies and schemes",
+                btn_save_notif: "💾 Save Preferences",
+                voice_title: "Voice Assistant Settings",
+                voice_subtitle: "Configure voice interaction preferences",
+                voice_lang_label: "Voice Language",
+                voice_input: "Voice Input",
+                voice_input_desc: "Allow voice commands",
+                voice_output: "Voice Output",
+                voice_output_desc: "Enable spoken responses",
+                voice_speed: "Voice Speed",
+                voice_speed_slow: "Slow",
+                voice_speed_normal: "Normal",
+                voice_speed_fast: "Fast",
+                btn_save_voice: "💾 Save Settings",
+                btn_test_voice: "🎤 Test Voice",
+                storage_title: "Data & Storage",
+                storage_subtitle: "Manage offline data and cache",
+                storage_used: "Storage Used",
+                storage_offline: "Offline Mode",
+                storage_offline_desc: "Download data for offline access",
+                storage_sync: "Auto-Sync",
+                storage_sync_desc: "Automatically sync when online",
+                btn_clear_cache: "🗑️ Clear Cache",
+                btn_download_data: "⬇️ Download Data",
+                privacy_title: "Privacy & Security",
+                privacy_subtitle: "Manage your privacy settings",
+                privacy_location: "Location Sharing",
+                privacy_location_desc: "Share location for better recommendations",
+                privacy_analytics: "Usage Analytics",
+                privacy_analytics_desc: "Help improve the app by sharing usage data",
+                privacy_password: "Change Password",
+                enter_new_password: "Enter new password",
+                btn_update_password: "🔐 Update Password",
+                about_title: "About & Support",
+                about_subtitle: "App information and help",
+                about_tagline: "AI-Driven Agriculture Insights Platform",
+                about_version: "Version",
+                about_developer: "Developed by",
+                about_description: "A voice-interactive PWA designed to empower Indian farmers with real-time agricultural insights, weather forecasts, market prices, and AI-based crop recommendations.",
+                btn_help: "📖 Help Center",
+                btn_terms: "📄 Terms & Privacy",
+                btn_support: "📧 Contact Support",
+                critical_title: "Critical Actions",
+                critical_subtitle: "Proceed with caution - these actions are permanent",
+                critical_warning: "⚠️ These actions cannot be undone. Please be certain before proceeding.",
+                btn_reset: "🔄 Reset All Settings",
+                btn_delete: "🗑️ Delete Account",
+                greeting_prefix: "Hello",
+                voice_test_en: "Hello farmer! This is Kisan Sathi, your agricultural assistant. Voice output is working correctly.",
+                coming_soon: "🚀 Coming Soon!",
+                detect_location_msg: "📍 Location detection feature will be available soon!\n\nPlease enter your location manually for now.",
+                help_coming_soon: "📖 Help Center\n\n🚀 Detailed help documentation is coming soon!\n\nFor now, explore the app and contact support if you need assistance.",
+                terms_coming_soon: "📄 Terms & Privacy\n\n🚀 Detailed terms and privacy policy coming soon!\n\nYour data is safe and secure with us.",
+                support_coming_soon: "📧 Contact Support\n\n🚀 Direct support channels coming soon!\n\nFor urgent queries, please email:\nsupport@kisansathi.com"
+            },
+            hi: {
+                app_name: "किसान साथी",
+                nav_dashboard: "डैशबोर्ड",
+                nav_weather: "मौसम",
+                nav_crops: "फसलें",
+                nav_market: "बाजार मूल्य",
+                nav_news: "समाचार",
+                nav_tools: "खेती के उपकरण",
+                nav_settings: "सेटिंग्स",
+                nav_profile: "मेरी प्रोफ़ाइल",
+                header_subtitle: "अपनी प्राथमिकताएं प्रबंधित करें",
+                status_online: "ऑनलाइन",
+                page_title: "सेटिंग्स",
+                success_message: "✅ सेटिंग्स सफलतापूर्वक सहेजी गई!",
+                lang_title: "भाषा प्राथमिकताएं",
+                lang_subtitle: "पूरे ऐप के लिए अपनी पसंदीदा भाषा चुनें",
+                btn_save_lang: "💾 भाषा सहेजें और लागू करें",
+                theme_title: "थीम सेटिंग्स",
+                theme_subtitle: "अपनी पसंदीदा थीम चुनें",
+                dark_mode: "डार्क मोड",
+                dark_mode_desc: "रात में बेहतर देखने के लिए डार्क थीम सक्षम करें",
+                loc_title: "स्थान सेटिंग्स",
+                loc_subtitle: "सटीक मौसम और बाजार डेटा के लिए अपने खेत का स्थान सेट करें",
+                loc_state: "राज्य",
+                loc_district: "जिला",
+                loc_village: "गांव/शहर",
+                select_state: "राज्य चुनें",
+                enter_district: "जिला दर्ज करें",
+                enter_village: "गांव या शहर दर्ज करें",
+                btn_save_loc: "💾 स्थान सहेजें",
+                btn_detect_loc: "📍 मेरा स्थान पता करें",
+                notif_title: "अधिसूचना प्राथमिकताएं",
+                notif_subtitle: "प्रबंधित करें कि आप कौन सी सूचनाएं प्राप्त करते हैं",
+                notif_weather: "मौसम अलर्ट",
+                notif_weather_desc: "गंभीर मौसम स्थितियों के बारे में सूचित रहें",
+                notif_price: "मूल्य अलर्ट",
+                notif_price_desc: "फसल की कीमतों में महत्वपूर्ण बदलाव होने पर सूचित करें",
+                notif_tips: "खेती के सुझाव",
+                notif_tips_desc: "दैनिक खेती के सुझाव और सलाह प्राप्त करें",
+                notif_schemes: "सरकारी योजनाएं",
+                notif_schemes_desc: "नई सब्सिडी और योजनाओं पर अपडेट",
+                btn_save_notif: "💾 प्राथमिकताएं सहेजें",
+                voice_title: "वॉयस असिस्टेंट सेटिंग्स",
+                voice_subtitle: "वॉयस इंटरैक्शन प्राथमिकताएं कॉन्फ़िगर करें",
+                voice_lang_label: "आवाज की भाषा",
+                voice_input: "वॉयस इनपुट",
+                voice_input_desc: "वॉयस कमांड की अनुमति दें",
+                voice_output: "वॉयस आउटपुट",
+                voice_output_desc: "बोले गए उत्तर सक्षम करें",
+                voice_speed: "आवाज की गति",
+                voice_speed_slow: "धीमी",
+                voice_speed_normal: "सामान्य",
+                voice_speed_fast: "तेज",
+                btn_save_voice: "💾 सेटिंग्स सहेजें",
+                btn_test_voice: "🎤 आवाज परीक्षण करें",
+                storage_title: "डेटा और संग्रहण",
+                storage_subtitle: "ऑफ़लाइन डेटा और कैश प्रबंधित करें",
+                storage_used: "उपयोग किया गया संग्रहण",
+                storage_offline: "ऑफ़लाइन मोड",
+                storage_offline_desc: "ऑफ़लाइन पहुंच के लिए डेटा डाउनलोड करें",
+                storage_sync: "ऑटो-सिंक",
+                storage_sync_desc: "ऑनलाइन होने पर स्वचालित रूप से सिंक करें",
+                btn_clear_cache: "🗑️ कैश साफ़ करें",
+                btn_download_data: "⬇️ डेटा डाउनलोड करें",
+                privacy_title: "गोपनीयता और सुरक्षा",
+                privacy_subtitle: "अपनी गोपनीयता सेटिंग्स प्रबंधित करें",
+                privacy_location: "स्थान साझाकरण",
+                privacy_location_desc: "बेहतर सिफारिशों के लिए स्थान साझा करें",
+                privacy_analytics: "उपयोग विश्लेषण",
+                privacy_analytics_desc: "उपयोग डेटा साझा करके ऐप को बेहतर बनाने में मदद करें",
+                privacy_password: "पासवर्ड बदलें",
+                enter_new_password: "नया पासवर्ड दर्ज करें",
+                btn_update_password: "🔐 पासवर्ड अपडेट करें",
+                about_title: "के बारे में और समर्थन",
+                about_subtitle: "ऐप जानकारी और सहायता",
+                about_tagline: "एआई-संचालित कृषि अंतर्दृष्टि मंच",
+                about_version: "संस्करण",
+                about_developer: "द्वारा विकसित",
+                about_description: "एक वॉयस-इंटरैक्टिव PWA जो भारतीय किसानों को वास्तविक समय की कृषि अंतर्दृष्टि, मौसम पूर्वानुमान, बाजार मूल्य और एआई-आधारित फसल सिफारिशों के साथ सशक्त बनाने के लिए डिज़ाइन किया गया है।",
+                btn_help: "📖 सहायता केंद्र",
+                btn_terms: "📄 शर्तें और गोपनीयता",
+                btn_support: "📧 संपर्क समर्थन",
+                critical_title: "महत्वपूर्ण कार्य",
+                critical_subtitle: "सावधानी के साथ आगे बढ़ें - ये कार्य स्थायी हैं",
+                critical_warning: "⚠️ इन क्रियाओं को पूर्ववत नहीं किया जा सकता। आगे बढ़ने से पहले निश्चित रहें।",
+                btn_reset: "🔄 सभी सेटिंग्स रीसेट करें",
+                btn_delete: "🗑️ खाता हटाएं",
+                greeting_prefix: "नमस्ते",
+                voice_test_hi: "नमस्ते किसान! यह किसान साथी है, आपका कृषि सहायक। वॉयस आउटपुट सही तरीके से काम कर रहा है।",
+                coming_soon: "🚀 जल्द आ रहा है!",
+                detect_location_msg: "📍 स्थान पता लगाने की सुविधा जल्द उपलब्ध होगी!\n\nकृपया अभी के लिए अपना स्थान मैन्युअल रूप से दर्ज करें।",
+                help_coming_soon: "📖 सहायता केंद्र\n\n🚀 विस्तृत सहायता दस्तावेज़ जल्द आ रहे हैं!\n\nअभी के लिए, ऐप का अन्वेषण करें और यदि आपको सहायता की आवश्यकता है तो समर्थन से संपर्क करें।",
+                terms_coming_soon: "📄 शर्तें और गोपनीयता\n\n🚀 विस्तृत शर्तें और गोपनीयता नीति जल्द आ रही है!\n\nआपका डेटा हमारे साथ सुरक्षित है।",
+                support_coming_soon: "📧 संपर्क समर्थन\n\n🚀 प्रत्यक्ष समर्थन चैनल जल्द आ रहे हैं!\n\nतत्काल प्रश्नों के लिए, कृपया ईमेल करें:\nsupport@kisansathi.com"
+            },
+            te: {
+                app_name: "కిసాన్ సతి",
+                nav_dashboard: "డాష్‌బోర్డ్",
+                nav_weather: "వాతావరణం",
+                nav_crops: "పంటలు",
+                nav_market: "మార్కెట్ ధరలు",
+                nav_news: "వార్తలు",
+                nav_tools: "వ్యవసాయ సాధనాలు",
+                nav_settings: "సెట్టింగ్‌లు",
+                nav_profile: "నా ప్రొఫైల్",
+                header_subtitle: "మీ ప్రాధాన్యతలను నిర్వహించండి",
+                status_online: "ఆన్‌లైన్",
+                page_title: "సెట్టింగ్‌లు",
+                success_message: "✅ సెట్టింగ్‌లు విజయవంతంగా సేవ్ చేయబడ్డాయి!",
+                lang_title: "భాషా ప్రాధాన్యతలు",
+                lang_subtitle: "మొత్తం యాప్ కోసం మీకు ఇష్టమైన భాషను ఎంచుకోండి",
+                btn_save_lang: "💾 భాషను సేవ్ చేసి వర్తింపజేయండి",
+                theme_title: "థీమ్ సెట్టింగ్‌లు",
+                theme_subtitle: "మీకు ఇష్టమైన థీమ్‌ను ఎంచుకోండి",
+                dark_mode: "డార్క్ మోడ్",
+                dark_mode_desc: "రాత్రి సమయంలో మెరుగైన వీక్షణ కోసం డార్క్ థీమ్‌ను ప్రారంభించండి",
+                loc_title: "స్థాన సెట్టింగ్‌లు",
+                loc_subtitle: "ఖచ్చితమైన వాతావరణం మరియు మార్కెట్ డేటా కోసం మీ వ్యవసాయ స్థానాన్ని సెట్ చేయండి",
+                loc_state: "రాష్ట్రం",
+                loc_district: "జిల్లా",
+                loc_village: "గ్రామం/పట్టణం",
+                select_state: "రాష్ట్రం ఎంచుకోండి",
+                enter_district: "జిల్లా నమోదు చేయండి",
+                enter_village: "గ్రామం లేదా పట్టణం నమోదు చేయండి",
+                btn_save_loc: "💾 స్థానాన్ని సేవ్ చేయండి",
+                btn_detect_loc: "📍 నా స్థానాన్ని గుర్తించండి",
+                notif_title: "నోటిఫికేషన్ ప్రాధాన్యతలు",
+                notif_subtitle: "మీరు ఏ నోటిఫికేషన్‌లను స్వీకరిస్తున్నారో నిర్వహించండి",
+                notif_weather: "వాతావరణ హెచ్చరికలు",
+                notif_weather_desc: "తీవ్రమైన వాతావరణ పరిస్థితుల గురించి తెలియజేయబడండి",
+                notif_price: "ధర హెచ్చరికలు",
+                notif_price_desc: "పంట ధరలు గణనీయంగా మారినప్పుడు తెలియజేయండి",
+                notif_tips: "వ్యవసాయ చిట్కాలు",
+                notif_tips_desc: "రోజువారీ వ్యవసాయ చిట్కాలు మరియు సలహాలను స్వీకరించండి",
+                notif_schemes: "ప్రభుత్వ పథకాలు",
+                notif_schemes_desc: "కొత్త సబ్సిడీలు మరియు పథకాలపై నవీకరణలు",
+                btn_save_notif: "💾 ప్రాధాన్యతలను సేవ్ చేయండి",
+                voice_title: "వాయిస్ అసిస్టెంట్ సెట్టింగ్‌లు",
+                voice_subtitle: "వాయిస్ ఇంటరాక్షన్ ప్రాధాన్యతలను కాన్ఫిగర్ చేయండి",
+                voice_lang_label: "వాయిస్ భాష",
+                voice_input: "వాయిస్ ఇన్‌పుట్",
+                voice_input_desc: "వాయిస్ కమాండ్‌లను అనుమతించండి",
+                voice_output: "వాయిస్ అవుట్‌పుట్",
+                voice_output_desc: "మాట్లాడే ప్రతిస్పందనలను ప్రారంభించండి",
+                voice_speed: "వాయిస్ వేగం",
+                voice_speed_slow: "నెమ్మదిగా",
+                voice_speed_normal: "సాధారణం",
+                voice_speed_fast: "వేగంగా",
+                btn_save_voice: "💾 సెట్టింగ్‌లను సేవ్ చేయండి",
+                btn_test_voice: "🎤 వాయిస్‌ను పరీక్షించండి",
+                storage_title: "డేటా & స్టోరేజీ",
+                storage_subtitle: "ఆఫ్‌లైన్ డేటా మరియు కాష్‌ను నిర్వహించండి",
+                storage_used: "ఉపయోగించిన స్టోరేజీ",
+                storage_offline: "ఆఫ్‌లైన్ మోడ్",
+                storage_offline_desc: "ఆఫ్‌లైన్ యాక్సెస్ కోసం డేటాను డౌన్‌లోడ్ చేయండి",
+                storage_sync: "ఆటో-సింక్",
+                storage_sync_desc: "ఆన్‌లైన్‌లో ఉన్నప్పుడు స్వయంచాలకంగా సింక్ చేయండి",
+                btn_clear_cache: "🗑️ కాష్ క్లియర్ చేయండి",
+                btn_download_data: "⬇️ డేటా డౌన్‌లోడ్ చేయండి",
+                privacy_title: "గోప్యత & భద్రత",
+                privacy_subtitle: "మీ గోప్యత సెట్టింగ్‌లను నిర్వహించండి",
+                privacy_location: "స్థాన భాగస్వామ్యం",
+                privacy_location_desc: "మెరుగైన సిఫార్సుల కోసం స్థానాన్ని భాగస్వామ్యం చేయండి",
+                privacy_analytics: "వినియోగ విశ్లేషణలు",
+                privacy_analytics_desc: "వినియోగ డేటాను భాగస్వామ్యం చేయడం ద్వారా యాప్‌ను మెరుగుపరచడంలో సహాయపడండి",
+                privacy_password: "పాస్‌వర్డ్ మార్చండి",
+                enter_new_password: "కొత్త పాస్‌వర్డ్ నమోదు చేయండి",
+                btn_update_password: "🔐 పాస్‌వర్డ్‌ను నవీకరించండి",
+                about_title: "గురించి & మద్దతు",
+                about_subtitle: "యాప్ సమాచారం మరియు సహాయం",
+                about_tagline: "AI-నడిచే వ్యవసాయ అంతర్దృష్టుల వేదిక",
+                about_version: "సంస్కరణ",
+                about_developer: "అభివృద్ధి చేసినది",
+                about_description: "రియల్-టైమ్ వ్యవసాయ అంతర్దృష్టులు, వాతావరణ సూచనలు, మార్కెట్ ధరలు మరియు AI-ఆధారిత పంట సిఫార్సులతో భారతీయ రైతులను శక్తివంతం చేయడానికి రూపొందించిన వాయిస్-ఇంటరాక్టివ్ PWA.",
+                btn_help: "📖 సహాయ కేంద్రం",
+                btn_terms: "📄 నిబంధనలు & గోప్యత",
+                btn_support: "📧 మద్దతును సంప్రదించండి",
+                critical_title: "క్లిష్టమైన చర్యలు",
+                critical_subtitle: "జాగ్రత్తగా కొనసాగండి - ఈ చర్యలు శాశ్వతం",
+                critical_warning: "⚠️ ఈ చర్యలను రద్దు చేయలేము. కొనసాగే ముందు నిశ్చయించుకోండి.",
+                btn_reset: "🔄 అన్ని సెట్టింగ్‌లను రీసెట్ చేయండి",
+                btn_delete: "🗑️ ఖాతాను తొలగించండి",
+                greeting_prefix: "హలో",
+                voice_test_te: "హలో రైతు! ఇది కిసాన్ సతి, మీ వ్యవసాయ సహాయకుడు. వాయిస్ అవుట్‌పుట్ సరిగ్గా పనిచేస్తోంది.",
+                coming_soon: "🚀 త్వరలో వస్తోంది!",
+                detect_location_msg: "📍 స్థాన గుర్తింపు ఫీచర్ త్వరలో అందుబాటులోకి వస్తుంది!\n\nదయచేసి ప్రస్తుతానికి మీ స్థానాన్ని మాన్యువల్‌గా నమోదు చేయండి।",
+                help_coming_soon: "📖 సహాయ కేంద్రం\n\n🚀 వివరణాత్మక సహాయ డాక్యుమెంటేషన్ త్వరలో వస్తోంది!\n\nప్రస్తుతానికి, యాప్‌ను అన్వేషించండి మరియు మీకు సహాయం అవసరమైతే మద్దతును సంప్రదించండి.",
+                terms_coming_soon: "📄 నిబంధనలు & గోప్యత\n\n🚀 వివరణాత్మక నిబంధనలు మరియు గోప్యతా విధానం త్వరలో వస్తోంది!\n\nమీ డేటా మాతో సురక్షితంగా ఉంది.",
+                support_coming_soon: "📧 మద్దతును సంప్రదించండి\n\n🚀 ప్రత్యక్ష మద్దతు ఛానెల్‌లు త్వరలో వస్తాయి!\n\nత్వరిత ప్రశ్నల కోసం, దయచేసి ఇమెయిల్ చేయండి:\nsupport@kisansathi.com"
+            },
+            ur: {
+                app_name: "کسان ساتھی",
+                nav_dashboard: "ڈیش بورڈ",
+                nav_weather: "موسم",
+                nav_crops: "فصلیں",
+                nav_market: "مارکیٹ کی قیمتیں",
+                nav_news: "خبریں",
+                nav_tools: "زرعی آلات",
+                nav_settings: "ترتیبات",
+                nav_profile: "میری پروفائل",
+                header_subtitle: "اپنی ترجیحات کا نظم کریں",
+                status_online: "آن لائن",
+                page_title: "ترتیبات",
+                success_message: "✅ ترتیبات کامیابی سے محفوظ ہو گئیں!",
+                lang_title: "زبان کی ترجیحات",
+                lang_subtitle: "پوری ایپ کے لیے اپنی پسندیدہ زبان منتخب کریں",
+                btn_save_lang: "💾 زبان محفوظ کریں اور لاگو کریں",
+                theme_title: "تھیم کی ترتیبات",
+                theme_subtitle: "اپنی پسندیدہ تھیم منتخب کریں",
+                dark_mode: "ڈارک موڈ",
+                dark_mode_desc: "رات کو بہتر دیکھنے کے لیے ڈارک تھیم فعال کریں",
+                loc_title: "مقام کی ترتیبات",
+                loc_subtitle: "درست موسم اور مارکیٹ ڈیٹا کے لیے اپنے فارم کا مقام سیٹ کریں",
+                loc_state: "ریاست",
+                loc_district: "ضلع",
+                loc_village: "گاؤں/شہر",
+                select_state: "ریاست منتخب کریں",
+                enter_district: "ضلع درج کریں",
+                enter_village: "گاؤں یا شہر درج کریں",
+                btn_save_loc: "💾 مقام محفوظ کریں",
+                btn_detect_loc: "📍 میرا مقام تلاش کریں",
+                notif_title: "اطلاع کی ترجیحات",
+                notif_subtitle: "منظم کریں کہ آپ کون سی اطلاعات وصول کرتے ہیں",
+                notif_weather: "موسم کی انتباہات",
+                notif_weather_desc: "شدید موسمی حالات کے بارے میں مطلع ہوں",
+                notif_price: "قیمت کی انتباہات",
+                notif_price_desc: "جب فصل کی قیمتیں نمایاں طور پر تبدیل ہوں تو مطلع کریں",
+                notif_tips: "کاشتکاری کے نکات",
+                notif_tips_desc: "روزانہ کاشتکاری کے نکات اور مشورے حاصل کریں",
+                notif_schemes: "حکومتی اسکیمیں",
+                notif_schemes_desc: "نئی سبسڈی اور اسکیموں پر اپ ڈیٹس",
+                btn_save_notif: "💾 ترجیحات محفوظ کریں",
+                voice_title: "وائس اسسٹنٹ کی ترتیبات",
+                voice_subtitle: "وائس انٹرایکشن کی ترجیحات کو ترتیب دیں",
+                voice_lang_label: "وائس کی زبان",
+                voice_input: "وائس ان پٹ",
+                voice_input_desc: "وائس کمانڈز کی اجازت دیں",
+                voice_output: "وائس آؤٹ پٹ",
+                voice_output_desc: "بولے ہوئے جوابات فعال کریں",
+                voice_speed: "وائس کی رفتار",
+                voice_speed_slow: "سست",
+                voice_speed_normal: "عام",
+                voice_speed_fast: "تیز",
+                btn_save_voice: "💾 ترتیبات محفوظ کریں",
+                btn_test_voice: "🎤 وائس ٹیسٹ کریں",
+                storage_title: "ڈیٹا اور اسٹوریج",
+                storage_subtitle: "آف لائن ڈیٹا اور کیش کا نظم کریں",
+                storage_used: "استعمال شدہ اسٹوریج",
+                storage_offline: "آف لائن موڈ",
+                storage_offline_desc: "آف لائن رسائی کے لیے ڈیٹا ڈاؤن لوڈ کریں",
+                storage_sync: "خودکار ہم آہنگی",
+                storage_sync_desc: "آن لائن ہونے پر خودکار طور پر ہم آہنگ کریں",
+                btn_clear_cache: "🗑️ کیش صاف کریں",
+                btn_download_data: "⬇️ ڈیٹا ڈاؤن لوڈ کریں",
+                privacy_title: "رازداری اور سیکیورٹی",
+                privacy_subtitle: "اپنی رازداری کی ترتیبات کا نظم کریں",
+                privacy_location: "مقام کا اشتراک",
+                privacy_location_desc: "بہتر سفارشات کے لیے مقام کا اشتراک کریں",
+                privacy_analytics: "استعمال کا تجزیہ",
+                privacy_analytics_desc: "استعمال کے ڈیٹا کا اشتراک کرکے ایپ کو بہتر بنانے میں مدد کریں",
+                privacy_password: "پاس ورڈ تبدیل کریں",
+                enter_new_password: "نیا پاس ورڈ درج کریں",
+                btn_update_password: "🔐 پاس ورڈ اپ ڈیٹ کریں",
+                about_title: "کے بارے میں اور معاونت",
+                about_subtitle: "ایپ کی معلومات اور مدد",
+                about_tagline: "AI سے چلنے والا زرعی بصیرت پلیٹ فارم",
+                about_version: "ورژن",
+                about_developer: "تیار کردہ",
+                about_description: "ایک وائس انٹرایکٹو PWA جو ہندوستانی کسانوں کو حقیقی وقت کی زرعی بصیرت، موسم کی پیشن گوئی، مارکیٹ کی قیمتوں اور AI پر مبنی فصل کی سفارشات کے ساتھ بااختیار بنانے کے لیے ڈیزائن کیا گیا ہے۔",
+                btn_help: "📖 مدد کا مرکز",
+                btn_terms: "📄 شرائط اور رازداری",
+                btn_support: "📧 معاونت سے رابطہ کریں",
+                critical_title: "اہم اقدامات",
+                critical_subtitle: "احتیاط سے آگے بڑھیں - یہ اقدامات مستقل ہیں",
+                critical_warning: "⚠️ ان اقدامات کو کالعدم نہیں کیا جا سکتا۔ آگے بڑھنے سے پہلے یقینی بنائیں۔",
+                btn_reset: "🔄 تمام ترتیبات کو دوبارہ ترتیب دیں",
+                btn_delete: "🗑️ اکاؤنٹ حذف کریں",
+                greeting_prefix: "ہیلو",
+                voice_test_ur: "ہیلو کسان! یہ کسان ساتھی ہے، آپ کا زرعی معاون۔ وائس آؤٹ پٹ صحیح طریقے سے کام کر رہا ہے۔",
+                coming_soon: "🚀 جلد آ رہا ہے!",
+                detect_location_msg: "📍 مقام کی شناخت کی خصوصیت جلد دستیاب ہوگی!\n\nبراہ کرم ابھی کے لیے اپنا مقام دستی طور پر درج کریں۔",
+                help_coming_soon: "📖 مدد کا مرکز\n\n🚀 تفصیلی مدد کی دستاویزات جلد آ رہی ہیں!\n\nابھی کے لیے، ایپ کو دریافت کریں اور اگر آپ کو مدد کی ضرورت ہو تو معاونت سے رابطہ کریں۔",
+                terms_coming_soon: "📄 شرائط اور رازداری\n\n🚀 تفصیلی شرائط اور رازداری کی پالیسی جلد آ رہی ہے!\n\nآپ کا ڈیٹا ہمارے ساتھ محفوظ ہے۔",
+                support_coming_soon: "📧 معاونت سے رابطہ کریں\n\n🚀 براہ راست معاونت کے چینلز جلد آ رہے ہیں!\n\nفوری سوالات کے لیے، براہ کرم ای میل کریں:\nsupport@kisansathi.com"
+            }
+        };
+
+        // Voice test messages per language
+        const voiceTestMessages = {
+            'en-IN': translations.en.voice_test_en,
+            'hi-IN': translations.hi.voice_test_hi,
+            'te-IN': translations.te.voice_test_te,
+            'ur-IN': translations.ur.voice_test_ur
+        };
+
+        // Settings state
+        const settings = {
+            language: 'en',
+            darkMode: false,
+            location: { state: '', district: '', village: '' },
+            notifications: { weather: true, price: true, tips: false, schemes: true },
+            voice: { language: 'en-IN', input: true, output: true, speed: 1 },
+            storage: { offline: true, sync: true, cacheSize: 3.5 },
+            privacy: { location: true, analytics: false }
+        };
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            updateGreeting();
+        });
+
+        function loadSettings() {
+            const saved = JSON.parse(localStorage.getItem('kisanSathiSettings') || '{}');
+            Object.assign(settings, saved);
+            
+            if (settings.language) {
+                selectLanguage(settings.language, false);
+                applyTranslations(settings.language);
+            }
+            
+            if (settings.darkMode) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').classList.add('active');
+            }
+            
+            if (settings.location.state) {
+                document.getElementById('state').value = settings.location.state;
+                document.getElementById('district').value = settings.location.district;
+                document.getElementById('village').value = settings.location.village;
+                showLocationStatus(`${settings.location.village}, ${settings.location.district}, ${settings.location.state}`);
+            }
+            
+            applyToggle('weatherToggle', settings.notifications.weather);
+            applyToggle('priceToggle', settings.notifications.price);
+            applyToggle('tipsToggle', settings.notifications.tips);
+            applyToggle('schemesToggle', settings.notifications.schemes);
+            applyToggle('voiceInputToggle', settings.voice.input);
+            applyToggle('voiceOutputToggle', settings.voice.output);
+            applyToggle('offlineToggle', settings.storage.offline);
+            applyToggle('syncToggle', settings.storage.sync);
+            applyToggle('locationToggle', settings.privacy.location);
+            applyToggle('analyticsToggle', settings.privacy.analytics);
+            
+            selectVoiceLanguage(settings.voice.language, false);
+            document.getElementById('voiceSpeed').value = settings.voice.speed;
+            
+            updateStorageDisplay();
+        }
+
+        function saveSettings() {
+            localStorage.setItem('kisanSathiSettings', JSON.stringify(settings));
+            showSuccess();
+        }
+
+        function applyToggle(id, state) {
+            const toggle = document.getElementById(id);
+            if (toggle) {
+                if (state) toggle.classList.add('active');
+                else toggle.classList.remove('active');
+            }
+        }
+
+        // Language functions
+        let selectedLang = 'en';
+        function selectLanguage(lang, save = true) {
+            selectedLang = lang;
+            document.querySelectorAll('.language-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.querySelector(`[data-lang="${lang}"]`).classList.add('selected');
+            
+            if (save) {
+                settings.language = lang;
+            }
+        }
+
+        function saveLanguage() {
+            settings.language = selectedLang;
+            saveSettings();
+            applyTranslations(selectedLang);
+            showSuccess(translations[selectedLang].success_message);
+        }
+
+        function applyTranslations(lang) {
+            const trans = translations[lang] || translations.en;
+            document.querySelectorAll('[data-translate]').forEach(elem => {
+                const key = elem.getAttribute('data-translate');
+                if (trans[key]) {
+                    elem.textContent = trans[key];
+                }
+            });
+            
+            // Update placeholders
+            document.querySelectorAll('[data-translate-placeholder]').forEach(elem => {
+                const key = elem.getAttribute('data-translate-placeholder');
+                if (trans[key]) {
+                    elem.placeholder = trans[key];
+                }
+            });
+            
+            // Update greeting
+            updateGreeting();
+        }
+
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            const lang = settings.language || 'en';
+            const trans = translations[lang];
+            let greeting = trans.greeting_prefix || 'Hello';
+            
+            document.getElementById('userGreeting').textContent = `${greeting}, Muneeba Ifrah! 👋`;
+        }
+
+        // Dark mode
+        function toggleDarkMode() {
+            const toggle = document.getElementById('darkModeToggle');
+            toggle.classList.toggle('active');
+            document.body.classList.toggle('dark-mode');
+            settings.darkMode = toggle.classList.contains('active');
+            saveSettings();
+        }
+
+        // Toggle handler
+        function toggleSetting(id) {
+            const toggle = document.getElementById(id);
+            toggle.classList.toggle('active');
+            
+            const isActive = toggle.classList.contains('active');
+            switch(id) {
+                case 'weatherToggle': settings.notifications.weather = isActive; break;
+                case 'priceToggle': settings.notifications.price = isActive; break;
+                case 'tipsToggle': settings.notifications.tips = isActive; break;
+                case 'schemesToggle': settings.notifications.schemes = isActive; break;
+                case 'voiceInputToggle': settings.voice.input = isActive; break;
+                case 'voiceOutputToggle': settings.voice.output = isActive; break;
+                case 'offlineToggle': settings.storage.offline = isActive; break;
+                case 'syncToggle': settings.storage.sync = isActive; break;
+                case 'locationToggle': settings.privacy.location = isActive; break;
+                case 'analyticsToggle': settings.privacy.analytics = isActive; break;
+            }
+        }
+
+        // Location functions
+        function saveLocation() {
+            const state = document.getElementById('state').value;
+            const district = document.getElementById('district').value;
+            const village = document.getElementById('village').value;
+            
+            const trans = translations[settings.language];
+            
+            if (!state || !district || !village) {
+                alert(trans.critical_warning || 'Please fill in all location fields');
+                return;
+            }
+            
+            settings.location = { state, district, village };
+            saveSettings();
+            showLocationStatus(`${village}, ${district}, ${state}`);
+        }
+
+        function detectLocation() {
+            const trans = translations[settings.language];
+            alert(trans.detect_location_msg);
+        }
+
+        function showLocationStatus(text) {
+            const status = document.getElementById('locationStatus');
+            const textElem = document.getElementById('locationText');
+            textElem.textContent = text;
+            status.classList.add('show');
+        }
+
+        // Notification settings
+        function saveNotifications() {
+            saveSettings();
+        }
+
+        // Voice settings
+        let selectedVoiceLang = 'en-IN';
+        function selectVoiceLanguage(lang, save = true) {
+            selectedVoiceLang = lang;
+            document.querySelectorAll('.voice-lang-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.querySelector(`[data-voice-lang="${lang}"]`).classList.add('selected');
+            
+            if (save) {
+                settings.voice.language = lang;
+            }
+        }
+
+        function saveVoiceSettings() {
+            settings.voice.language = selectedVoiceLang;
+            settings.voice.speed = parseFloat(document.getElementById('voiceSpeed').value);
+            saveSettings();
+        }
+
+        function testVoice() {
+            const text = voiceTestMessages[settings.voice.language] || voiceTestMessages['en-IN'];
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = settings.voice.language;
+            utterance.rate = settings.voice.speed;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Storage functions
+        function updateStorageDisplay() {
+            const size = settings.storage.cacheSize;
+            const percentage = (size / 10) * 100;
+            document.getElementById('storageUsed').textContent = `${size.toFixed(1)} MB / 10 MB`;
+            document.getElementById('storageFill').style.width = `${percentage}%`;
+        }
+
+        function clearCache() {
+            const trans = translations[settings.language];
+            if (confirm(trans.critical_warning || 'Are you sure you want to clear the cache?')) {
+                settings.storage.cacheSize = 0.5;
+                updateStorageDisplay();
+                saveSettings();
+                showSuccess(trans.btn_clear_cache + ' ' + trans.success_message);
+            }
+        }
+
+        function downloadOfflineData() {
+            const trans = translations[settings.language];
+            showSuccess(trans.btn_download_data + '...');
+            
+            setTimeout(() => {
+                settings.storage.cacheSize = 7.2;
+                updateStorageDisplay();
+                saveSettings();
+                showSuccess(trans.success_message);
+            }, 2000);
+        }
+
+        // Privacy functions
+        function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const trans = translations[settings.language];
+            
+            if (!newPassword) {
+                alert(trans.enter_new_password || 'Please enter a new password');
+                return;
+            }
+            if (newPassword.length < 6) {
+                alert('Password must be at least 6 characters long');
+                return;
+            }
+            
+            showSuccess(trans.btn_update_password + ' ' + trans.success_message);
+            document.getElementById('newPassword').value = '';
+        }
+
+        // About & Support
+        function showHelp() {
+            const trans = translations[settings.language];
+            alert(trans.help_coming_soon);
+        }
+
+        function showTerms() {
+            const trans = translations[settings.language];
+            alert(trans.terms_coming_soon);
+        }
+
+        function contactSupport() {
+            const trans = translations[settings.language];
+            alert(trans.support_coming_soon);
+        }
+
+        // Critical actions
+        function resetSettings() {
+            const trans = translations[settings.language];
+            if (confirm(trans.critical_warning + '\n\n' + trans.btn_reset + '?')) {
+                if (confirm(trans.btn_reset + ' - ' + trans.critical_warning)) {
+                    localStorage.removeItem('kisanSathiSettings');
+                    alert(trans.success_message);
+                    location.reload();
+                }
+            }
+        }
+
+        function deleteAccount() {
+            const trans = translations[settings.language];
+            if (confirm(trans.critical_warning + '\n\n' + trans.btn_delete + '?')) {
+                const confirmation = prompt('Type "DELETE" in capital letters to confirm:');
+                if (confirmation === 'DELETE') {
+                    localStorage.clear();
+                    alert(trans.btn_delete + ' - ' + trans.success_message);
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } else {
+                    alert('Account deletion cancelled.');
+                }
+            }
+        }
+
+        // Voice assistant
+        function activateVoice() {
+            const trans = translations[settings.language];
+            alert('🎤 ' + trans.voice_title + '\n\n' + trans.coming_soon + '\n\n' + trans.voice_subtitle);
+        }
+
+        // Success message
+        function showSuccess(message = null) {
+            const trans = translations[settings.language];
+            const successMsg = document.getElementById('successMessage');
+            const successText = document.getElementById('successText');
+            
+            if (message) {
+                successText.textContent = message;
+            } else {
+                successText.textContent = trans.success_message;
+            }
+            
+            successMsg.classList.add('show');
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
