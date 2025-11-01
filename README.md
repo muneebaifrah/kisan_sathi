@@ -88,6 +88,9 @@ http://127.0.0.1:5000/
   Your browser does not support playing this video.
 </video>
 
+[▶️ Watch Demo Video](https://raw.githubusercontent.com/muneebaifrah/kisan_sathi/main/Kisan_sathi(Demo).mp4)
+
+
 ---
 
 ## 🎯 Future Enhancements
