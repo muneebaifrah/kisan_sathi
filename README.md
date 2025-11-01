@@ -82,9 +82,12 @@ http://127.0.0.1:5000/
 ---
 
 ## 🎥 Demo Video
-Click to watch the demo:  
-👉 
-https://github.com/muneebaifrah/kisan_sathi/blob/main/Kisan_sathi(Demo).mp4
+
+<video controls width="700">
+  <source src="https://raw.githubusercontent.com/muneebaifrah/kisan_sathi/main/Kisan_sathi(Demo).mp4" type="video/mp4">
+  Your browser does not support playing this video.
+</video>
+
 ---
 
 ## 🎯 Future Enhancements
